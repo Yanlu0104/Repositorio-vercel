@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fase 3: Subtração Automática (Estilo Neon)</title>
+    <style>
+        /* ESTILOS GERAIS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://files.manuscdn.com/user_upload_by_module/session_file/310419663028362190/ezrUpwawgdnXYBcw.png'); 
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .game-container {
+            background: transparent;
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #61dafb;
+            font-size: 28px;
+            margin-bottom: 10px;
+            background-color: rgba(2, 45, 70, 0.7); 
+            padding: 15px 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 0 20px rgba(97, 218, 251, 0.6); 
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #FFD700;
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        /* PLACAR SUPERIOR */
+        .score-board {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.5); 
+            border: 2px solid #61dafb; 
+            border-radius: 15px;
+            padding: 10px 20px;
+            box-shadow: 0 0 15px rgba(97, 218, 251, 0.7); 
+        }
+
+        .score-item {
+            padding: 8px 15px;
+            text-align: center;
+            min-width: 110px;
+        }
+
+        .score-label {
+            color: #E0E0E0;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .score-value {
+            color: #FFD700;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.7); 
+        }
+
+        /* ÁREA PRINCIPAL DO JOGO */
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 30px;
+            background: rgba(0, 49, 80, 0.6); 
+            border: 3px solid #61dafb;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 30px rgba(97, 218, 251, 0.7);
+        }
+
+        .options-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4); 
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .draggable-option {
+            background: #FFD700;
+            color: #282c34; 
+            border: 2px solid #FFECB3; 
+            border-radius: 10px;
+            padding: 15px 25px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.6);
+            transition: transform 0.2s, box-shadow 0.2s;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .draggable-option.move { 
+            opacity: 0.4; 
+            transform: scale(1.1); 
+        }
+
+        .draggable-option.disabled {
+            opacity: 0.5;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .math-operation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px; 
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .math-number {
+            background: #1a3a4e; 
+            border: 2px solid #FFD700; 
+            border-radius: 10px;
+            padding: 12px 25px; 
+            color: #FFD700;
+            font-size: 24px;
+            font-weight: bold;
+            min-width: 60px;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.7); 
+        }
+
+        .math-operator {
+            color: #61dafb;
+            font-size: 28px;
+            font-weight: bolder;
+            text-shadow: 0 0 10px rgba(97, 218, 251, 0.8);
+        }
+
+        /* DROP ZONE E FEEDBACK VISUAL (AUMENTO DE VELOCIDADE AQUI) */
+        .drop-zone {
+            border: 4px dashed #FFD700; 
+            min-width: 100px; 
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(30, 30, 30, 0.8); 
+            border-radius: 12px;
+            /* AUMENTADO: Transição mais lenta para 0.5s */
+            transition: all 0.5s; 
+        }
+        
+        #dropZoneContent {
+            font-size: 2.5em; 
+            font-weight: bold;
+            color: #FFD700; 
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.9); 
+        }
+
+        .drop-zone.correct {
+            background-color: #32CD32; 
+            border-color: #32CD32;
+            box-shadow: 0 0 20px #32CD32;
+        }
+        
+        .drop-zone.incorrect {
+            background-color: #FF4500; 
+            border-color: #FF4500;
+            box-shadow: 0 0 20px #FF4500;
+        }
+        
+        /* FEEDBACK DE TEXTO SIMPLES */
+        .feedback {
+            text-align: center;
+            font-size: 24px; 
+            font-weight: bold;
+            margin-top: 10px;
+            min-height: 30px; 
+            padding: 5px 10px;
+            background: rgba(0, 0, 0, 0.7); 
+            border-radius: 5px;
+            opacity: 0; 
+            transition: opacity 0.1s;
+        }
+
+        .feedback.show {
+            opacity: 1; 
+        }
+        
+        .feedback.correct {
+            color: #90EE90;
+            text-shadow: 0 0 8px #90EE90;
+        }
+
+        .feedback.incorrect {
+            color: #FA8072;
+            text-shadow: 0 0 8px #FA8072;
+        }
+
+
+        /* ESTILOS DO MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(0, 49, 80, 0.98); 
+            border: 5px solid #61dafb; 
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(97, 218, 251, 0.9); 
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .modal-content h2 {
+            color: #FFD700;
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px #FFD700;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .modal-content p {
+            color: #E0E0E0;
+            font-size: 18px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        .modal-content p span {
+            color: #61dafb;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 0 0 5px #61dafb;
+        }
+
+        .modal-buttons {
+            display: flex;
+            flex-direction: column; 
+            gap: 15px; 
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .modal-buttons button {
+            background-color: #61dafb; 
+            color: #282c34;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px; 
+            font-size: 18px; 
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(97, 218, 251, 0.5); 
+            min-width: 250px; 
+        }
+
+        .modal-buttons button:hover {
+            background-color: #a0f0ff;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 25px #a0f0ff; 
+        }
+
+        /* ESTILO PARA BOTÃO DE VOLTAR */
+        .modal-buttons .back-button {
+            background-color: #FFD700; /* Dourado */
+            color: #1a3a4e; /* Azul Escuro */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.6); 
+            order: -1; /* Força ele a ser o primeiro botão da coluna */
+        }
+
+        .modal-buttons .back-button:hover {
+            background-color: #FFEE99;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 25px #FFEE99; 
+            transform: translateY(-2px) scale(1.02);
+        }
+        
+        #modalPhaseComplete h2 {
+            color: #32CD32; 
+            text-shadow: 0 0 10px #32CD32;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>fase 3- Aprenda como subtrair</h1>
+        <p class="subtitle">Arraste e Solte a Resposta Correta!</p>
+
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">Acertos:</div>
+                <div class="score-value" id="correct">0/5</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Erros Totais:</div>
+                <div class="score-value" id="errors">0</div>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="options-container" id="optionsContainer">
+                </div>
+
+            <div class="math-operation">
+                <div class="math-number" id="num1">?</div>
+                <div class="math-operator">−</div>
+                <div class="math-number" id="num2">?</div>
+                <div class="math-operator">=</div>
+                <div class="drop-zone" id="dropZone">
+                    <span id="dropZoneContent">?</span>
+                </div>
+            </div>
+            
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalPhaseComplete">
+        <div class="modal-content">
+            <h2>5 ACERTOS CONCLUÍDOS! 🎉</h2> 
+            <p>Parabéns! Você completou a meta desta fase.</p>
+            <p>Escolha sua próxima ação:</p>
+            
+            <div class="modal-buttons">
+                <button onclick="continuePhase()">
+                    Continuar Jogando
+                </button>
+                <button onclick="showFinalFeedbackModal()">
+                    Mudar de Fase
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalFinalFeedback">
+        <div class="modal-content">
+            <h2>Fase Finalizada! 🏆</h2>
+            <p>Acertos Totais: <span id="modalCorrect">0</span></p>
+            <p>Erros Acumulados: <span id="modalErrors">0</span></p>
+            <p>Total de Tentativas: <span id="modalAttempts">0</span></p>
+            <div class="modal-buttons">
+                <button onclick="goToPreviousPhase()" class="back-button">
+                    ← Voltar para a Fase Anterior
+                </button> 
+                <button onclick="goToNextPhase()">Próxima Fase →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variáveis de Estado
+        let correctAnswers = 0; // Acertos na rodada atual (até 5)
+        let totalErrors = 0;
+        let totalAttempts = 0;
+        let globalTotalCorrectAnswers = 0; // Total de acertos na sessão
+        let isProcessingDrop = false;
+        let draggedItem = null;
+        
+        const TARGET_ACERTOS = 1; 
+        const MAX_CORRECT = TARGET_ACERTOS;
+        const MIN_NUMERO = 5; 
+        const MAX_NUMERO = 20; 
+        const resultadosUsados = []; 
+        let currentOperation = { num1: 0, num2: 0, total: 0 };
+
+
+        function gerarNovaConta() {
+            if (correctAnswers >= TARGET_ACERTOS) {
+                document.getElementById('modalPhaseComplete').classList.add('show');
+                return;
+            }
+            
+            const dropZone = document.getElementById('dropZone');
+            const dropZoneContent = document.getElementById('dropZoneContent');
+            const feedback = document.getElementById('feedback');
+            
+            // Reset visual
+            dropZoneContent.textContent = "?";
+            dropZone.className = 'drop-zone'; 
+            dropZoneContent.style.color = '#FFD700';
+            feedback.textContent = '';
+            feedback.className = 'feedback';
+            isProcessingDrop = false;
+
+            let novoTotal;
+            let num1, num2;
+            
+            do {
+                num1 = Math.floor(Math.random() * (MAX_NUMERO - MIN_NUMERO + 1)) + MIN_NUMERO;
+                num2 = Math.floor(Math.random() * (num1 - MIN_NUMERO + 1)) + 1; 
+                novoTotal = num1 - num2;
+            } while (novoTotal <= 0 || resultadosUsados.includes(novoTotal)); 
+            
+            currentOperation = { num1, num2, total: novoTotal };
+            resultadosUsados.push(novoTotal);
+            
+            document.getElementById('num1').textContent = num1;
+            document.getElementById('num2').textContent = num2;
+
+            const options = [currentOperation.total];
+            
+            let tentativa = 0;
+            while (options.length < 3 && tentativa < 10) {
+                let erro;
+                if (tentativa % 2 === 0) {
+                    erro = currentOperation.total + (Math.floor(Math.random() * 2) + 1); 
+                } else {
+                    erro = currentOperation.total - (Math.floor(Math.random() * 2) + 1); 
+                }
+                
+                if (erro >= 1 && erro < MAX_NUMERO && !options.includes(erro)) {
+                    options.push(erro);
+                }
+                tentativa++;
+            }
+            
+            options.sort(() => Math.random() - 0.5);
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            options.forEach(option => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'draggable-option';
+                optionEl.textContent = option;
+                optionEl.draggable = true;
+                optionEl.addEventListener('dragstart', handleDragStart);
+                optionsContainer.appendChild(optionEl);
+            });
+            
+            setupDropZone();
+            
+            document.getElementById('correct').textContent = `${correctAnswers}/${MAX_CORRECT}`; 
+            document.getElementById('errors').textContent = totalErrors;
+        }
+
+        // Funções de Drag & Drop
+        function setupDropZone() {
+            const dropZone = document.getElementById('dropZone');
+            // Remove listeners para evitar duplicidade
+            dropZone.removeEventListener('dragover', (e) => {});
+            dropZone.removeEventListener('dragleave', (e) => {});
+            dropZone.removeEventListener('drop', handleDrop);
+
+            // Adiciona listeners
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); e.currentTarget.classList.add('drag-over'); });
+            dropZone.addEventListener('dragleave', (e) => { e.currentTarget.classList.remove('drag-over'); });
+            dropZone.addEventListener('drop', handleDrop);
+        }
+
+        function handleDragStart(e) {
+            if (isProcessingDrop) return;
+            
+            setTimeout(() => {
+                e.target.classList.add('move');
+                e.target.style.visibility = 'hidden'; 
+            }, 0); 
+            
+            e.dataTransfer.setData('text/plain', e.target.textContent);
+            draggedItem = e.target;
+            
+            const handleDragEnd = (event) => {
+                event.target.classList.remove('move');
+                if (event.target.parentNode) { 
+                    event.target.style.visibility = 'visible'; 
+                }
+                event.target.removeEventListener('dragend', handleDragEnd); 
+                draggedItem = null;
+            };
+
+            e.target.addEventListener('dragend', handleDragEnd);
+        }
+        
+        /**
+         * FUNÇÃO ATUALIZADA:
+         * O setTimeout foi aumentado para 700ms para manter o feedback de acerto/erro na tela por mais tempo.
+         */
+        function handleDrop(e) {
+            e.preventDefault();
+            const dropZone = e.currentTarget;
+            const feedback = document.getElementById('feedback'); 
+
+            dropZone.classList.remove('drag-over');
+            
+            if (isProcessingDrop) return;
+            isProcessingDrop = true;
+            
+            const selectedValue = parseInt(e.dataTransfer.getData('text/plain'));
+            document.getElementById('dropZoneContent').textContent = selectedValue;
+            
+            totalAttempts++;
+            
+            // Desabilita as opções enquanto processamos o resultado
+            document.querySelectorAll('.draggable-option').forEach(el => el.classList.add('disabled'));
+            
+            if (selectedValue === currentOperation.total) {
+                // ACERTO
+                correctAnswers++;
+                globalTotalCorrectAnswers++; 
+                dropZone.classList.add('correct');
+                document.getElementById('dropZoneContent').style.color = 'white'; 
+                
+                feedback.textContent = 'CORRETO! ✅';
+                feedback.classList.add('correct', 'show'); 
+                
+            } else {
+                // ERRO
+                totalErrors++;
+                dropZone.classList.add('incorrect');
+                document.getElementById('dropZoneContent').style.color = 'white'; 
+                
+                feedback.textContent = 'ERRADO! ❌';
+                feedback.classList.add('incorrect', 'show'); 
+            }
+
+            if (draggedItem && draggedItem.parentNode) {
+                draggedItem.remove(); 
+                draggedItem = null;
+            }
+
+            // Atualiza placar imediatamente antes da troca
+            document.getElementById('correct').textContent = `${correctAnswers}/${MAX_CORRECT}`;
+            document.getElementById('errors').textContent = totalErrors;
+
+            // Remove feedback e gera nova conta após um tempo MAIOR (700ms) para visualização
+            setTimeout(() => {
+                dropZone.classList.remove('correct', 'incorrect');
+                feedback.classList.remove('correct', 'incorrect', 'show');
+                feedback.textContent = '';
+                gerarNovaConta(); 
+            }, 700); // <-- Tempo de feedback aumentado
+        }
+
+        // Funções de Modal e Progressão
+        function showFinalFeedbackModal() {
+            document.getElementById('modalPhaseComplete').classList.remove('show');
+            
+            document.getElementById('modalCorrect').textContent = globalTotalCorrectAnswers;
+            document.getElementById('modalErrors').textContent = totalErrors;
+            document.getElementById('modalAttempts').textContent = totalAttempts;
+            
+            document.getElementById('modalFinalFeedback').classList.add('show');
+        }
+
+        function continuePhase() {
+            correctAnswers = 0; 
+            resultadosUsados.length = 0; 
+            document.getElementById('modalPhaseComplete').classList.remove('show');
+            gerarNovaConta(); 
+        }
+
+        // SIMULAÇÃO: No ambiente real, esta função levaria o usuário à fase anterior
+        function goToPreviousPhase() { 
+             alert('Ação: Avançar para a Próxima Fase!'); 
+             window.location.href = '../fase 2/fase_2.html'; 
+        }
+
+        function goToNextPhase() { alert('Ação: Avançar para a Próxima Fase!'); 
+             window.location.href = '../fase 4/fase_4.html';
+        }
+        
+        // Função para reiniciar a fase atual (botão removido)
+        function retryPhase() { /* Função Removida */ }
+
+        // Inicia o jogo
+        gerarNovaConta();
+    </script>
+</body>
+</html>

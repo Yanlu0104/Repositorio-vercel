@@ -1,0 +1,120 @@
+<!-- Adicionar antes ou após o início do jogo -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu das Fases - Ilha do Saber</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: url('ilha_saber2.jpg') center center/cover no-repeat fixed, #87CEEB;
+      font-family: 'Bubblegum Sans', Arial Rounded MT Bold, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .menu-fases-container {
+      background: rgba(255,255,255,0.85);
+      border-radius: 40px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.10);
+      padding: 40px 25px;
+      margin: 60px auto 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 750px;
+    }
+    h1 {
+      color: #1e3a5f;
+      font-size: 3.2em;
+      margin-bottom: 25px;
+      text-shadow: 0 0 10px #70e6db, 3px 3px 0px #0003;
+      animation: pulse 2s infinite alternate;
+    }
+    .fases-grid {
+      display: grid;
+      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      width: 100%;
+      margin-top: 15px;
+      margin-bottom: 25px;
+    }
+    .fase-btn {
+      background: linear-gradient(135deg, #ffb347 40%, #ffcc80 100%);
+      color: #fff;
+      font-size: 2.3em;
+      border: none;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.18), 0 5px 0 #b76e2f;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.18s cubic-bezier(.42,.11,.27,1.57), box-shadow 0.3s;
+      outline: none;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 1.7s;
+      font-family: inherit;
+    }
+    .fase-btn:hover, .fase-btn:focus {
+      transform: scale(1.08);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.3), 0 10px 0 #b76e2f;
+      background: linear-gradient(135deg, #f9d976, #fcc95d 80%);
+    }
+    .fase-btn:active {
+      animation: jellyBounce 0.2s;
+      transform: scale(0.95);
+    }
+    /* Efeitos animados e responsividade */
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    @keyframes pulse { 0% {filter:brightness(1);} 100% {filter:brightness(1.1);} }
+    @keyframes jellyBounce { 0%{ transform: scale(1);} 50%{ transform:scale(0.9);} 100%{ transform:scale(1);} }
+    @media (max-width:600px) {
+      .menu-fases-container { padding: 12px 2px; }
+      .fases-grid { gap: 12px; }
+      .fase-btn { width: 75px; height: 75px; font-size: 1.3em; }
+      h1 { font-size: 2em; }
+    }
+    .btn-voltar {
+      background: #4DD0E1;
+      font-size: 1.3em;
+      padding: 12px 33px;
+      border-radius: 30px;
+      color: #fff;
+      border: none;
+      margin-top: 18px;
+      cursor: pointer;
+      box-shadow: 0 7px 0 #00ACC1, 0 15px 30px rgba(0,0,0,0.25);
+      transition: background .35s, box-shadow .33s, transform .17s;
+    }
+    .btn-voltar:hover { background: #80DEEA; box-shadow: 0 10px 0 #00ACC1, 0 25px 34px rgba(0,0,0,0.33);}
+  </style>
+</head>
+<body>
+  <div class="menu-fases-container">
+    <h1>SELECIONE UMA FASE</h1>
+    <div class="fases-grid">
+      <button class="fase-btn-1" onclick="window.location.href='fase 1/fase_1.html'">1</button>
+      <button class="fase-btn-2" onclick="window.location.href='fase 2/fase_2.html'">2</button>
+      <button class="fase-btn-3" onclick="window.location.href='fase 3/fase_3.html'">3</button>
+      <button class="fase-btn-4" onclick="window.location.href='fase 4/fase_4.html'">4</button>
+      <button class="fase-btn-5" onclick="window.location.href='fase 5/fase_5.html'">5</button>
+      <button class="fase-btn-6" onclick="window.location.href='fase 6/fase_6.html'">6</button>
+      <button class="fase-btn-7" onclick="window.location.href='fase 7/fase_7.html'">7</button>
+      <button class="fase-btn-8" onclick="window.location.href='fase 8/fase_8.html'">8</button>
+    </div>
+    <button class="btn-voltar" onclick="window.location.href='./index.html'">Voltar para início</button>
+  </div>
+  <script>
+
+
+  </script>
+</body>
+</html>

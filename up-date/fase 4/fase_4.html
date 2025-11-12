@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fase 4 - Vamos Aprender Adição com Subtração</title>
+    
+    <style>
+        body {
+            font-family: 'Arial', sans-serif; 
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            color: #E0E0E0; 
+            margin: 0;
+            padding: 50px; 
+            /* CERTIFIQUE-SE DE QUE ESTA IMAGEM ESTEJA NO CAMINHO CORRETO */
+            background-image: url('imagem_teste/ilha_teste3.jpg'); 
+            background-size: cover; 
+            background-repeat: no-repeat; 
+            background-attachment: fixed; 
+            background-position: center; 
+        }
+
+        h2 {
+            color: #61dafb; /* Azul brilhante */
+            margin-bottom: 30px;
+            background-color: rgba(2, 45, 70, 0.7); /* Fundo semi-transparente */
+            padding: 15px 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 0 20px rgba(97, 218, 251, 0.6); /* Brilho azul */
+            font-size: 2.2em; 
+            text-align: center;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); 
+        }
+        
+        /* NOVO ESTILO ADICIONADO/AJUSTADO: Subtítulo "Arraste e Solte" */
+        .subtitle {
+            /* COR AJUSTADA AQUI */
+            color: #A0F0FF; /* Definido para Azul Claro Brilhante/Ciano */
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 10px 20px;
+            /* Sombra e fundo para contraste */
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8); 
+            background-color: rgba(0, 49, 80, 0.7); 
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(160, 240, 255, 0.5); /* Brilho leve */
+        }
+        
+        .operation {
+            display: flex;
+            align-items: center;
+            font-size: 3.5em; 
+            gap: 25px; 
+            margin-bottom: 40px;
+            background-color: rgba(0, 49, 80, 0.7); /* Fundo azul escuro semi-transparente */
+            padding: 35px 50px; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 30px rgba(97, 218, 251, 0.7); /* Sombra e Brilho */
+            border: 3px solid #61dafb; 
+        }
+        .operation p {
+            margin: 0;
+            padding: 12px 25px; 
+            border-radius: 10px;
+            background-color: #1a3a4e; 
+            border: 2px solid #FFD700; /* Borda amarela dourada */
+            font-weight: bold;
+            color: #FFD700; /* Números em amarelo dourado */
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.7); 
+        }
+        .op-display {
+            color: #61dafb; /* Operadores em azul brilhante */
+            font-weight: bolder;
+            font-size: 1.3em; 
+            text-shadow: 0 0 10px rgba(97, 218, 251, 0.8); 
+        }
+        .res-container {
+            border: 4px dashed #FFD700; /* Borda amarela tracejada */
+            min-width: 100px; 
+            height: 80px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(30, 30, 30, 0.8); 
+            transition: all 0.3s;
+            border-radius: 12px;
+            box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.5); 
+        }
+        #res {
+            font-size: 2.5em; /* Fonte da resposta maior */
+            font-weight: bold;
+            color: #FFD700; 
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.9); 
+        }
+        /* Drag & Drop Feedback */
+        .res-container.enter {
+            border-color: #a0f0ff; 
+            background-color: rgba(80, 80, 80, 0.9);
+            box-shadow: 0 0 20px #a0f0ff; 
+        }
+        .res-container.correct {
+            background-color: #32CD32; 
+            border-color: #32CD32;
+            box-shadow: 0 0 20px #32CD32;
+        }
+        .res-container.error {
+            background-color: #FF4500; 
+            border-color: #FF4500;
+            box-shadow: 0 0 20px #FF4500;
+        }
+        .results {
+            display: flex;
+            gap: 25px; 
+            margin-bottom: 50px;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .results p span {
+            font-size: 2.2em; 
+            padding: 18px 30px; 
+            background-color: #FFD700; /* Amarelo dourado */
+            color: #282c34; 
+            border-radius: 10px;
+            cursor: grab;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.6); 
+            transition: transform 0.1s;
+            border: 2px solid #FFECB3; 
+        }
+        .results p span.move {
+            opacity: 0.4; 
+            transform: scale(1.1); 
+        }
+        
+        /* ESTILO ORIGINAL DO BOTÃO (MANTIDO) */
+        .button {
+            padding: 12px 25px; 
+            font-size: 1.3em; 
+            cursor: pointer;
+            background-color: #61dafb; 
+            border: none;
+            border-radius: 8px;
+            color: #282c34;
+            font-weight: bold;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(97, 218, 251, 0.5); 
+        }
+        .button:hover {
+            background-color: #a0f0ff; 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 25px rgba(97, 218, 251, 0.8);
+        }
+        
+        /* NOVO ESTILO PARA REMOVER O BOTÃO - Adicionado para esconder o "Recomeçar Rodada" */
+        .button {
+            display: none !important; 
+        }
+        
+        /* --- Demais estilos de placar (mantidos) --- */
+        .feedback-placar {
+            display: none; 
+            margin-bottom: 25px; 
+            padding: 15px 25px;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.8); 
+            box-shadow: 0 0 15px rgba(97, 218, 251, 0.7);
+            font-size: 1.2em; 
+            align-items: center;
+            gap: 40px; 
+            color: #E0E0E0;
+        }
+        .feedback-placar p span {
+            font-weight: bold;
+        }
+        /* ESTILOS ADICIONADOS AQUI: */
+        .menu-progressao.final {
+            flex-direction: column; /* Força o empilhamento dos botões no placar final */
+            gap: 15px;
+            margin-top: 20px;
+            width: 100%;
+            align-items: center;
+        }
+        .menu-progressao {
+            display: flex;
+            gap: 20px; 
+            margin-top: 15px;
+        }
+        .menu-progressao button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            min-width: 250px; /* Garante que os botões fiquem maiores no menu final */
+        }
+        .menu-progressao button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+        .btn-continuar {
+            background-color: #32CD32; 
+            color: white;
+        }
+        .btn-mudar-fase {
+            background-color: #FF4500; 
+            color: white;
+        }
+        .btn-proxima-fase {
+            background-color: #61dafb; 
+            color: #282c34;
+            border: 2px solid #a0f0ff;
+        }
+        /* ESTILO NOVO: Botão Voltar para Fase Anterior (Dourado/Amarelo) */
+        .btn-voltar-fase {
+            background-color: #FFD700; /* Amarelo Dourado */
+            color: #282c34; /* Texto Escuro */
+            border: 2px solid #FFA500;
+        }
+        .btn-voltar-fase:hover {
+            background-color: #FFA500;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    
+    <h2>Fase 4 - Vamos Aprender Adição com Subtração</h2>
+    <p class="subtitle">Arraste e Solte a Resposta Correta!</p> 
+
+    <div class="results">
+        <p><span draggable="true">1</span></p>
+        <p><span draggable="true">2</span></p>
+        <p><span draggable="true">3</span></p>
+    </div>
+
+    <div class="operation">
+        <p class="num-display" id="num1-display">5</p> 
+        <span class="op-display" id="op1-display">+</span>
+        
+        <p class="num-display" id="num2-display">3</p> 
+        <span class="op-display" id="op2-display">-</span>
+        
+        <p class="num-display" id="num3-display">2</p> 
+        
+        <span>=</span>
+        
+        <p class="res-container">
+            <span id="res" dropzone="true"></span>
+        </p>
+    </div>
+
+    <button class="button">Recomeçar Rodada</button>
+
+    <script>
+        const itens = document.querySelectorAll('.results p span');
+        const dropzone = document.getElementById('res');
+        const dropzoneContainer = document.querySelector('.res-container');
+
+        const num1Display = document.getElementById('num1-display');
+        const num2Display = document.getElementById('num2-display');
+        const num3Display = document.getElementById('num3-display');
+        const op1Display = document.getElementById('op1-display');
+        const op2Display = document.getElementById('op2-display');
+
+        const resetButton = document.querySelector('.button'); 
+        const operationArea = document.querySelector('.operation');
+        const gameElements = document.querySelector('.results');
+        const subtitle = document.querySelector('.subtitle'); // Seleciona o subtítulo
+
+        let num1, num2, num3, total;
+        let acertos = 0;
+        let erros = 0;
+        let tentativasTotais = 0;
+        let draggedItem = null;
+        let isProcessingDrop = false;
+
+        const TARGET_ACERTOS = 1; 
+
+        const resultadosUsados = []; 
+        const MIN_NUMERO = 1; 
+        const MAX_NUMERO = 8; 
+        const MAX_RESULTADO = 15; 
+
+        const feedbackDisplay = document.createElement('div');
+        feedbackDisplay.classList.add('feedback-placar');
+        const firstResultsElement = document.querySelector('.results');
+        if (firstResultsElement) {
+            document.body.insertBefore(feedbackDisplay, firstResultsElement);
+        } else {
+            document.body.appendChild(feedbackDisplay);
+        }
+        
+        // Move o subtítulo para logo após o h2
+        const h2 = document.querySelector('h2');
+        if (h2 && subtitle) {
+            h2.parentNode.insertBefore(subtitle, h2.nextSibling);
+        }
+
+
+        function toggleGameVisibility(isVisible) {
+            const displayValue = isVisible ? 'flex' : 'none';
+            operationArea.style.display = displayValue; 
+            gameElements.style.display = displayValue; 
+            // AQUI O JAVASCRIPT TENTA MOSTRAR O BOTÃO, MAS O CSS COM !IMPORTANT VAI ESCONDÊ-LO
+            // resetButton.style.display = isVisible ? 'block' : 'none'; 
+        }
+
+        function atualizarPlacar() {
+            feedbackDisplay.style.display = 'none';
+
+            if (acertos >= TARGET_ACERTOS) {
+                toggleGameVisibility(false);
+                
+                feedbackDisplay.style.display = 'flex';
+                feedbackDisplay.style.flexDirection = 'column';
+                feedbackDisplay.innerHTML = `
+                    <p style="color: #FFD700; font-size: 1.2em; margin-bottom: 10px;">🥳 **Parabéns!** Você completou uma rodada de ${TARGET_ACERTOS} contas!</p>
+                    <div class="menu-progressao">
+                        <button class="btn-continuar">Continuar na Fase</button>
+                        <button class="btn-mudar-fase">Mudar de Fase</button>
+                    </div>
+                `;
+                document.querySelector('.btn-continuar').addEventListener('click', continuarFase);
+                document.querySelector('.btn-mudar-fase').addEventListener('click', mostrarFeedbackFinal);
+
+            } else {
+                feedbackDisplay.style.display = 'flex';
+                feedbackDisplay.style.flexDirection = 'row';
+                feedbackDisplay.innerHTML = `
+                    <p>Acertos: <span style="color: #32CD32;">${acertos}</span>/${TARGET_ACERTOS}</p>
+                    <p>Erros Totais: <span style="color: #FF4500;">${erros}</span></p>
+                `;
+            }
+        }
+
+        function continuarFase() {
+            acertos = 0; 
+            resultadosUsados.length = 0; 
+            feedbackDisplay.style.display = 'none';
+            toggleGameVisibility(true);
+            gerarNovaConta(); 
+        }
+
+        function mostrarFeedbackFinal() {
+            toggleGameVisibility(false);
+            
+            feedbackDisplay.style.display = 'flex';
+            feedbackDisplay.style.flexDirection = 'column';
+            feedbackDisplay.innerHTML = `
+                <h3 style="color: #FFD700; margin-bottom: 20px;">Seu Desempenho na Fase</h3>
+                <p style="color: #32CD32; font-size: 1.2em; margin-bottom: 10px;">✅ Acertos Totais: ${tentativasTotais - erros}</p>
+                <p style="color: #FF4500; font-size: 1.2em; margin-bottom: 10px;">❌ Erros Totais: ${erros}</p>
+                <p style="color: #FFFFFF; font-size: 1.1em; margin-bottom: 20px;">Total de Tentativas: ${tentativasTotais}</p>
+                
+                <div class="menu-progressao final"> 
+                    <button class="btn-voltar-fase">← Voltar para a Fase Anterior</button>
+                    <button class="btn-proxima-fase">Ir para a Próxima Fase</button>
+                </div>
+            `;
+            
+            acertos = 0;
+            erros = 0;
+            tentativasTotais = 0;
+            resultadosUsados.length = 0;
+
+            document.querySelector('.btn-voltar-fase').addEventListener('click', () => {
+                alert('Voltando para o Menu Principal/Seleção de Fases!');
+                // Aqui você implementaria a lógica real de navegação.
+            });
+            
+            document.querySelector('.btn-proxima-fase').addEventListener('click', () => {
+                alert('Navegando para a próxima fase do Macaco Tico!');
+                 window.location.href = '../fase 5/fase_5.html'; 
+            });
+        }
+
+        function gerarNovaConta() {
+            if (acertos >= TARGET_ACERTOS) {
+                atualizarPlacar();
+                return;
+            }
+
+            dropzone.textContent = "";
+            dropzoneContainer.classList.remove('correct', 'error', 'dropped');
+            
+            itens.forEach((span) => {
+                span.style.visibility = 'visible';
+                span.setAttribute('draggable', 'true');
+                span.classList.remove('move');
+            });
+
+            let novoTotal;
+            const maxPossiveis = MAX_RESULTADO;
+            
+            if (resultadosUsados.length >= maxPossiveis) {
+                resultadosUsados.length = 0; 
+            }
+
+            do {
+                num1 = Math.floor(Math.random() * MAX_NUMERO) + MIN_NUMERO;
+                num2 = Math.floor(Math.random() * MAX_NUMERO) + MIN_NUMERO;
+                num3 = Math.floor(Math.random() * MAX_NUMERO) + MIN_NUMERO;
+                
+                const tipoOperacao = Math.floor(Math.random() * 2); 
+                
+                if (tipoOperacao === 0) { // A + B - C
+                    op1Display.textContent = '+';
+                    op2Display.textContent = '-';
+                    
+                    let somaAB = num1 + num2;
+                    if (somaAB - num3 < 1) {
+                        // Ajusta num3 para garantir que o resultado final seja > 0
+                        num3 = Math.floor(Math.random() * (somaAB - 1)) + 1;
+                    }
+                    novoTotal = somaAB - num3;
+
+                } else { // A - B + C
+                    op1Display.textContent = '-';
+                    op2Display.textContent = '+';
+
+                    // Garante que num1 seja maior que num2 para a primeira subtração
+                    if (num1 < num2) {
+                        [num1, num2] = [num2, num1]; // Troca os valores
+                    }
+                    if (num1 === num2) {
+                        num1 += 1;
+                        if (num1 > MAX_NUMERO) num1 = MAX_NUMERO;
+                    }
+                    
+                    if (num1 === num2 && num1 === MAX_NUMERO) {
+                         num2 -= 1;
+                    }
+
+
+                    novoTotal = (num1 - num2) + num3;
+                }
+
+            } while (novoTotal < 1 || novoTotal > MAX_RESULTADO || resultadosUsados.includes(novoTotal)); 
+            
+            total = novoTotal;
+            resultadosUsados.push(total); 
+
+            num1Display.textContent = num1;
+            num2Display.textContent = num2;
+            num3Display.textContent = num3;
+
+            const options = [total];
+            
+            let tentativa = 0;
+            while (options.length < 3 && tentativa < 10) {
+                let erro;
+                if (tentativa % 2 === 0) {
+                    erro = total + (Math.floor(Math.random() * 2) + 1);
+                } else {
+                    erro = total - (Math.floor(Math.random() * 2) + 1);
+                }
+                
+                if (erro >= 1 && erro <= MAX_RESULTADO && !options.includes(erro)) {
+                    options.push(erro);
+                }
+                tentativa++;
+            }
+
+            options.sort(() => Math.random() - 0.5);
+
+            itens.forEach((span, index) => {
+                span.textContent = options[index]; 
+            });
+
+            atualizarPlacar(); 
+        }
+
+        // --- Eventos de Drag & Drop (Mesma lógica) ---
+        function onDragStart(e) {
+            if (isProcessingDrop) return;
+            setTimeout(() => {
+                e.target.classList.add('move');
+            }, 0);
+            e.dataTransfer.setData("text/plain", e.target.textContent);
+            draggedItem = e.target; 
+        }
+
+        function onDragEnter(e) {
+            if (isProcessingDrop) return;
+            e.preventDefault();
+            dropzoneContainer.classList.add('enter'); 
+        }
+
+        function onDragLeave() {
+            if (isProcessingDrop) return;
+            dropzoneContainer.classList.remove('enter');
+        }
+
+        function onDragOver(e) { 
+            if (isProcessingDrop) return;
+            e.preventDefault();
+        }
+
+        function onDrop(e) {
+            if (acertos >= TARGET_ACERTOS || isProcessingDrop) return; 
+            isProcessingDrop = true; 
+            e.preventDefault();
+            dropzoneContainer.classList.remove('enter');
+            dropzoneContainer.classList.add('dropped');
+            const value = e.dataTransfer.getData("text/plain");
+            dropzone.textContent = value;
+
+            if (total === parseInt(value)) {
+                dropzoneContainer.classList.remove('error');
+                dropzoneContainer.classList.add('correct');
+                acertos++;
+                tentativasTotais++;
+                if (draggedItem) {
+                    draggedItem.style.visibility = 'hidden'; 
+                    draggedItem.setAttribute('draggable', 'false');
+                }
+                setTimeout(() => {
+                    isProcessingDrop = false; 
+                    gerarNovaConta(); 
+                }, 1500); 
+            } else {
+                dropzoneContainer.classList.remove('correct');
+                dropzoneContainer.classList.add('error');
+                erros++;
+                tentativasTotais++;
+                atualizarPlacar(); 
+                if (draggedItem) {
+                    draggedItem.classList.remove('move');
+                }
+                setTimeout(() => {
+                    dropzoneContainer.classList.remove('error');
+                    dropzone.textContent = ""; 
+                    dropzoneContainer.classList.remove('dropped');
+                    isProcessingDrop = false; 
+                    gerarNovaConta(); 
+                }, 500);
+            }
+            draggedItem = null; 
+        }
+
+        dropzoneContainer.addEventListener('dragenter', onDragEnter);
+        dropzoneContainer.addEventListener('dragleave', onDragLeave);
+        dropzoneContainer.addEventListener('dragover', onDragOver);
+        dropzoneContainer.addEventListener('drop', onDrop);
+
+        itens.forEach(item => {
+            item.addEventListener('dragstart', onDragStart);
+            item.addEventListener('dragend', () => item.classList.remove('move'));
+        });
+
+        resetButton.addEventListener('click', () => {
+            acertos = 0;
+            erros = 0;
+            tentativasTotais = 0;
+            resultadosUsados.length = 0; 
+            toggleGameVisibility(true); 
+            gerarNovaConta();
+        });
+
+        atualizarPlacar();
+        gerarNovaConta();
+    </script>
+</body>
+</html>

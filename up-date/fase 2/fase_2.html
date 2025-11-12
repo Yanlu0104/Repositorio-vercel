@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adição com Drag & Drop</title>
+    
+    <style>
+        /* Reset básico */
+        * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* IMAGEM DE FUNDO: Ilha Animada - Adapte o nome do arquivo conforme sua imagem */
+            background-image: url('fundo_jogo/imagem3_fase2.jpg'); 
+            background-position: center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #87CEEB; 
+            
+            min-height: 100vh;
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Título */
+        h2 {
+            width: max-content;
+            margin: 40px auto 20px auto;
+            padding: 15px 25px;
+            border: 1px solid #4682B4;
+            border-radius: 8px;
+            font-size: 28px; 
+            font-weight: bold;
+            color: #FFD700;
+            background-color: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        /* NOVO ESTILO: Subtítulo "Arraste e Solte" */
+        .subtitle {
+            color: #FFFFFF; /* Cor Branca para destaque (Alterado) */
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 5px 15px;
+            text-shadow: 2px 2px 4px #000080; /* Sombra Azul (Adicionado) */
+            background-color: rgba(0, 0, 0, 0.3); /* Fundo sutil */
+            border-radius: 5px;
+        }
+
+        /* Placar de Feedback (Aparece em diferentes estados: progresso ou final) */
+        .feedback-placar {
+            width: 400px;
+            margin: 10px auto 20px auto;
+            padding: 15px 20px;
+            border-radius: 12px;
+            background-color: rgba(70, 130, 180, 0.7);
+            color: #FFFFFF;
+            font-size: 1.1em;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; 
+            flex-wrap: wrap; 
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .feedback-placar p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .feedback-placar p:first-child {
+            color: #32CD32; 
+        }
+
+        .feedback-placar p:nth-child(2) {
+            color: #FF4500;
+        }
+
+        /* Estilo para o menu de progressão (LAYOUT LADO A LADO - Padrão de 5 acertos) */
+        .menu-progressao {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            width: 100%;
+            justify-content: center;
+            flex-direction: row; 
+            align-items: center;
+        }
+
+        /* NOVO BLOCO: Para o Layout FINAL (Empilhamento dos botões) */
+        .menu-progressao.final {
+            flex-direction: column; /* Força o empilhamento dos botões no placar final */
+            gap: 15px;
+            margin-top: 20px;
+            width: 100%;
+            align-items: center;
+        }
+
+
+        .feedback-placar h3 {
+            width: 100%;
+            margin: 10px 0;
+            font-size: 1.5em;
+        }
+
+        /* Estilo dos botões no menu de 5 acertos */
+        .btn-continuar, .btn-mudar-fase {
+            padding: 10px 20px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
+            min-width: 180px; 
+        }
+
+        /* Estilo para os botões do Feedback Final */
+        .btn-voltar-fase, .btn-proxima-fase {
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            min-width: 250px;
+        }
+
+        .btn-continuar {
+            background-color: #32CD32;
+            color: white;
+        }
+        .btn-mudar-fase {
+            background-color: #FFA500;
+            color: white;
+        }
+
+        /* NOVO ESTILO: Botão Voltar para Fase Anterior (Dourado/Amarelo) */
+        .btn-voltar-fase {
+            background-color: #FFD700;
+            color: #2F4F4F;
+            border: 2px solid #FFA500;
+        }
+        .btn-voltar-fase:hover {
+            background-color: #FFA500;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+
+        /* Estilo para o botão Próxima Fase */
+        .btn-proxima-fase {
+            background-color: #4682B4; 
+            color: #FFFFFF;
+            border: 2px solid #FFFFFF;
+        }
+        .btn-proxima-fase:hover {
+            background-color: #5a93c7;
+            transform: translateY(-2px);
+        }
+
+        /* Bloco dos números arrastáveis */
+        .results {
+            width: 380px; 
+            margin: 20px auto;
+            display: flex;
+            justify-content: space-around; 
+            background-color: rgba(70, 130, 180, 0.7); 
+            border-radius: 12px;
+            padding: 20px;
+            gap: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .results p {
+            flex: 1;
+            height: 80px; 
+            background-color: rgba(255, 255, 255, 0.15); 
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .results p span {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: grab; 
+            border-radius: 10px;
+            font-size: 2.5em; 
+            font-weight: bold;
+            color: #FFFFFF; 
+            background-color: #32CD32;
+            transition: all 0.2s ease-in-out;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .results p span.move {
+            opacity: 0.2;
+            cursor: grabbing;
+            transform: scale(1.05);
+            background-color: #FFA500;
+        }
+
+        /* Operação (e.g., "2 + 2 =") */
+        .operation {
+            width: 400px; 
+            margin: 40px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            font-size: 3em; 
+            color: #FFFFFF; 
+            background-color: rgba(70, 130, 180, 0.7);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Números fixos da operação (e.g., o "2" e "2" de "2 + 2") */
+        .operation p {
+            color: #FFD700;
+            padding: 5px 15px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.15); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Sinais de operação (+ e =) */
+        .operation span {
+            color: #FFA500;
+            font-weight: bold;
+        }
+
+        /* Área de resultado (onde o número é solto) */
+        .res-container {
+            width: 100px; 
+            height: 80px; 
+            background-color: rgba(255, 255, 255, 0.1); 
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2); 
+            border: 2px dashed #F4A460;
+            transition: all 0.3s ease;
+        }
+
+        .res-container span {
+            width: 100%;
+            height: 100%;
+            background-color: transparent; 
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5em; 
+            color: #FFD700;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .res-container.enter {
+            border: 2px dashed #FFA500;
+            background-color: rgba(255, 165, 0, 0.15); 
+        }
+
+        /* Feedback de Acerto */
+        .res-container.correct {
+            border: 2px solid #32CD32;
+            background-color: rgba(50, 205, 50, 0.25);
+            box-shadow: 0 0 15px rgba(50, 205, 50, 0.6); 
+        }
+
+        /* Feedback de Erro */
+        .res-container.error {
+            border: 2px solid #FF4500;
+            background-color: rgba(255, 69, 0, 0.25);
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.6); 
+        }
+
+        /* Botão Recomeçar (Oculto) */
+        .button {
+             display: none; 
+             margin: 0;
+        }
+    </style>
+    
+</head>
+<body>
+    
+    <h2>Fase 2 - Aprenda a Somar</h2> <p class="subtitle">Arraste e Solte a Resposta Correta!</p> <div class="results">
+        <p><span draggable="true">2</span></p>
+        <p><span draggable="true">4</span></p>
+        <p><span draggable="true">6</span></p>
+    </div>
+
+    <div class="operation">
+        <p>2</p> 
+        <span>+</span>
+        <p>2</p> 
+        <span>=</span>
+        
+        <p class="res-container">
+            <span id="res" dropzone="true"></span>
+        </p>
+    </div>
+
+    
+    <script>
+        const itens = document.querySelectorAll('.results p span');
+        const dropzone = document.getElementById('res');
+        const dropzoneContainer = document.querySelector('.res-container');
+        const num1Display = document.querySelector('.operation p:first-child');
+        const num2Display = document.querySelector('.operation p:nth-child(3)');
+        const operationArea = document.querySelector('.operation');
+        const gameElements = document.querySelector('.results');
+
+
+        // --- VARIÁVEIS DE ESTADO ---
+        let num1, num2, total;
+        let acertos = 0;
+        let erros = 0;
+        let tentativasTotais = 0;
+        let draggedItem = null;
+        let isProcessingDrop = false; 
+
+        const TARGET_ACERTOS = 1; 
+
+        // --- VARIÁVEIS DE CONTA ---
+        const resultadosUsados = []; 
+        const MAX_RESULTADO = 18; 
+
+        // --- CRIAÇÃO DO ELEMENTO DE FEEDBACK (Placar/Menu) ---
+        const feedbackDisplay = document.createElement('div');
+        feedbackDisplay.classList.add('feedback-placar');
+        const firstResultsElement = document.querySelector('.results');
+        if (firstResultsElement) {
+            document.body.insertBefore(feedbackDisplay, firstResultsElement);
+        } else {
+            document.body.appendChild(feedbackDisplay);
+        }
+
+
+        // --- Funções Auxiliares ---
+
+        // Função para esconder/mostrar a área de jogo
+        function toggleGameVisibility(isVisible) {
+            const displayValue = isVisible ? 'flex' : 'none';
+            
+            operationArea.style.display = displayValue; 
+            gameElements.style.display = displayValue; 
+        }
+
+
+        // --- Função para Atualizar o Placar/Menu ---
+        function atualizarPlacar() {
+            feedbackDisplay.style.display = 'none';
+
+            if (acertos >= TARGET_ACERTOS) {
+                toggleGameVisibility(false); 
+                
+                feedbackDisplay.style.display = 'flex';
+                feedbackDisplay.style.flexDirection = 'column';
+                feedbackDisplay.innerHTML = `
+                    <p style="color: #FFD700; font-size: 1.2em; margin-bottom: 10px;">🥳 **Parabéns!** Você completou uma rodada de ${TARGET_ACERTOS} contas!</p>
+                    <div class="menu-progressao">
+                        <button class="btn-continuar">Continuar na Fase</button>
+                        <button class="btn-mudar-fase">Mudar de Fase</button>
+                    </div>
+                `;
+                document.querySelector('.btn-continuar').addEventListener('click', continuarFase);
+                document.querySelector('.btn-mudar-fase').addEventListener('click', mostrarFeedbackFinal);
+
+            } else {
+                feedbackDisplay.style.display = 'flex';
+                feedbackDisplay.style.flexDirection = 'row';
+                feedbackDisplay.innerHTML = `
+                    <p>Acertos: <span style="color: #32CD32;">${acertos}</span>/${TARGET_ACERTOS}</p>
+                    <p>Erros Totais: <span style="color: #FF4500;">${erros}</span></p>
+                `;
+            }
+        }
+
+        // --- Funções de Ação do Menu de Progressão ---
+        function continuarFase() {
+            acertos = 0; 
+            resultadosUsados.length = 0; 
+            
+            feedbackDisplay.style.display = 'none';
+            toggleGameVisibility(true); 
+
+            gerarNovaConta(); 
+        }
+
+        // ===================================================
+        // FUNÇÃO MOSTRAR FEEDBACK FINAL (CORREÇÃO APLICADA)
+        // ===================================================
+        function mostrarFeedbackFinal() {
+            toggleGameVisibility(false); 
+            
+            feedbackDisplay.style.display = 'flex';
+            feedbackDisplay.style.flexDirection = 'column';
+            feedbackDisplay.innerHTML = `
+                <h3 style="color: #FFD700; margin-bottom: 20px;">Seu Desempenho na Fase</h3>
+                <p style="color: #32CD32; font-size: 1.2em; margin-bottom: 10px;">✅ Acertos Totais: ${tentativasTotais - erros}</p>
+                <p style="color: #FF4500; font-size: 1.2em; margin-bottom: 10px;">❌ Erros Totais: ${erros}</p>
+                <p style="color: #FFFFFF; font-size: 1.1em; margin-bottom: 20px;">Total de Tentativas: ${tentativasTotais}</p>
+                
+                <div class="menu-progressao final"> 
+                    <button class="btn-voltar-fase">← Voltar para a Fase Anterior</button> 
+                    <button class="btn-proxima-fase">Ir para a Próxima Fase</button>
+                </div>
+            `;
+            
+            // Zera o placar completo
+            acertos = 0;
+            erros = 0;
+            tentativasTotais = 0;
+            resultadosUsados.length = 0;
+
+            // LÓGICA CORRIGIDA: Não reinicia a fase, simula navegação para um menu.
+            document.querySelector('.btn-voltar-fase').addEventListener('click', () => {
+                alert('Voltando para o Menu Principal/Seleção de Fases!');
+                
+                // Se o seu menu principal estiver em um arquivo diferente, você pode usar:
+             window.location.href = '../fase 1/fase_1.html';
+            });
+
+            document.querySelector('.btn-proxima-fase').addEventListener('click', () => {
+                alert('Navegando para a próxima fase do Macaco Tico!');
+                 window.location.href = '../fase 3/fase_3.html'; 
+            });
+        }
+        // ===================================================
+
+        // --- Função para Gerar Nova Conta ---
+        function gerarNovaConta() {
+            if (acertos >= TARGET_ACERTOS) {
+                atualizarPlacar();
+                return;
+            }
+
+            // 1. Limpa a área de drop e feedback
+            dropzone.textContent = "";
+            dropzoneContainer.classList.remove('correct', 'error', 'dropped');
+            
+            itens.forEach((span) => {
+                span.style.visibility = 'visible';
+                span.setAttribute('draggable', 'true');
+                span.classList.remove('move');
+            });
+
+            // 2. Lógica para gerar conta ÚNICA (sem repetição de resultado)
+            let novoTotal;
+            let maxTentativas = MAX_RESULTADO - 1;
+            
+            if (resultadosUsados.length >= maxTentativas) {
+                resultadosUsados.length = 0;
+            }
+
+            do {
+                num1 = Math.floor(Math.random() * 9) + 1;
+                num2 = Math.floor(Math.random() * 9) + 1;
+                novoTotal = num1 + num2;
+            } while (resultadosUsados.includes(novoTotal)); 
+            
+            total = novoTotal;
+            resultadosUsados.push(total); 
+
+            // 3. Atualiza o HTML
+            num1Display.textContent = num1;
+            num2Display.textContent = num2;
+
+            // --- Gera e exibe as Opções de Resposta ---
+            const options = [total];
+            
+            let tentativa = 0;
+            while (options.length < 3 && tentativa < 10) {
+                let erro;
+                if (tentativa % 2 === 0) {
+                    erro = total + (Math.floor(Math.random() * 2) + 1);
+                } else {
+                    erro = total - (Math.floor(Math.random() * 2) + 1);
+                }
+                
+                if (erro > 0 && erro <= MAX_RESULTADO && !options.includes(erro)) {
+                    options.push(erro);
+                }
+                tentativa++;
+            }
+
+            options.sort(() => Math.random() - 0.5);
+
+            itens.forEach((span, index) => {
+                span.textContent = options[index]; 
+            });
+
+            atualizarPlacar(); 
+        }
+
+        // --- Eventos de Drag & Drop ---
+
+        function onDragStart(e) {
+            if (isProcessingDrop) return;
+            
+            setTimeout(() => {
+                e.target.classList.add('move');
+            }, 0);
+            e.dataTransfer.setData("text/plain", e.target.textContent);
+            draggedItem = e.target; 
+        }
+
+        function onDragEnter(e) {
+            if (isProcessingDrop) return;
+            e.preventDefault();
+            dropzoneContainer.classList.add('enter'); 
+        }
+
+        function onDragLeave() {
+            if (isProcessingDrop) return;
+            dropzoneContainer.classList.remove('enter');
+        }
+
+        function onDragOver(e) { 
+            if (isProcessingDrop) return;
+            e.preventDefault();
+        }
+
+        function onDrop(e) {
+            if (acertos >= TARGET_ACERTOS || isProcessingDrop) return; 
+
+            isProcessingDrop = true; 
+            
+            e.preventDefault();
+            dropzoneContainer.classList.remove('enter');
+            dropzoneContainer.classList.add('dropped');
+
+            const value = e.dataTransfer.getData("text/plain");
+            dropzone.textContent = value;
+
+            // VERIFICAÇÃO FINAL
+            if (total === parseInt(value)) {
+                dropzoneContainer.classList.remove('error');
+                dropzoneContainer.classList.add('correct');
+                
+                acertos++;
+                tentativasTotais++;
+                
+                if (draggedItem) {
+                    draggedItem.style.visibility = 'hidden'; 
+                    draggedItem.setAttribute('draggable', 'false');
+                }
+
+                setTimeout(() => {
+                    isProcessingDrop = false; 
+                    gerarNovaConta(); 
+                }, 1500); 
+
+            } else {
+                dropzoneContainer.classList.remove('correct');
+                dropzoneContainer.classList.add('error');
+                
+                erros++;
+                tentativasTotais++;
+                atualizarPlacar(); 
+
+                if (draggedItem) {
+                    draggedItem.classList.remove('move');
+                }
+
+                setTimeout(() => {
+                    dropzoneContainer.classList.remove('error');
+                    dropzone.textContent = ""; 
+                    dropzoneContainer.classList.remove('dropped');
+
+                    isProcessingDrop = false; 
+                    gerarNovaConta(); 
+                }, 500);
+            }
+            
+            draggedItem = null; 
+        }
+
+        // --- Associa Eventos ---
+
+        dropzoneContainer.addEventListener('dragenter', onDragEnter);
+        dropzoneContainer.addEventListener('dragleave', onDragLeave);
+        dropzoneContainer.addEventListener('dragover', onDragOver);
+        dropzoneContainer.addEventListener('drop', onDrop);
+
+        itens.forEach(item => {
+            item.addEventListener('dragstart', onDragStart);
+            item.addEventListener('dragend', () => item.classList.remove('move'));
+        });
+        
+        // --- Início do Jogo ---
+        atualizarPlacar();
+        gerarNovaConta();
+    </script>
+</body>
+</html>
