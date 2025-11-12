@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fase 7: Multiplicação e Divisão Simples</title>
+    <style>
+        /* ESTILOS GERAIS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            /* IMAGEM DE FUNDO (Caminho da Fase 7) */
+            background-image: url('imagem_7/imagem_71.jpg'); 
+            background-color: #38761d00; 
+            
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        ::-webkit-scrollbar { display: none; }
+
+
+        .game-container {
+            /* Fundo Semi-Transparente para o conteúdo */
+            background: rgba(0, 50, 0, 0); 
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 900px;
+            width: 100%;
+            /* Destaque Principal: Ciano Claro */
+            box-shadow: 0 0 30px rgba(0, 188, 212, 0.8); 
+            border: 2px solid #00BCD4; 
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            max-height: 95vh;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .game-container::-webkit-scrollbar { display: none; }
+
+        /* NOVO CONTÊINER DE CABEÇALHO PARA MELHORAR A LEGIBILIDADE */
+        .header-text-container {
+            /* Fundo Escuro para isolar o texto do background */
+            background: rgba(0, 0, 0, 0.7); 
+            padding: 15px 10px; 
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 700px; 
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+            text-align: center; 
+            border: 1px solid #00BCD4; 
+        }
+
+        h1 {
+            /* Destaque Secundário: Bege/Areia */
+            color: #FFEBAC; 
+            font-size: 32px;
+            margin-bottom: 5px; /* Reduzido para caber melhor no contêiner */
+            text-shadow: 0 0 10px rgba(255, 235, 172, 0.8);
+        }
+
+        .subtitle {
+            /* Destaque Principal: Ciano Claro */
+            color: #00BCD4; 
+            font-size: 20px;
+            margin-bottom: 0;
+            text-shadow: 0 0 5px rgba(0, 188, 212, 0.6);
+        }
+
+        /* PLACAR */
+        .score-board {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            /* Fundo Escuro: Azul Marinho Transparente */
+            background: rgba(2, 62, 138, 0.7);
+            border: 1px solid #FFEBAC; /* Borda Bege/Areia */
+            border-radius: 10px;
+            padding: 10px 20px;
+        }
+
+        .score-item {
+            padding: 5px 10px;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .score-label {
+            color: #E0E0E0;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .score-value {
+            /* Destaque Principal: Ciano Claro */
+            color: #00BCD4;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(0, 188, 212, 0.8);
+        }
+
+        /* FEEDBACK DE ACERTO/ERRO IMEDIATO */
+        .feedback {
+            min-height: 40px; 
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding: 5px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s, background-color 0.3s, transform 0.3s;
+        }
+
+        .feedback.show { opacity: 1; transform: scale(1.05); }
+        .feedback.correct { background: rgba(50, 205, 50, 0.8); color: white; box-shadow: 0 0 15px rgba(50, 205, 50, 0.7); }
+        .feedback.incorrect { background: rgba(255, 69, 0, 0.8); color: white; box-shadow: 0 0 15px rgba(255, 69, 0, 0.7); }
+
+        .game-area {
+            /* Fundo Escuro: Azul Marinho Transparente */
+            background: rgba(2, 62, 138, 0.5);
+            border: 1px solid #00BCD4; /* Destaque Principal: Ciano Claro */
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.5);
+        }
+
+        /* OPÇÕES DE ARRASTAR */
+        .options-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 10px;
+        }
+
+        .options-container > * { flex-basis: auto; }
+
+        .draggable-option {
+            /* Fundo: Azul Claro / Céu */
+            background: #80DEEA; 
+            border: 2px solid #FFEBAC; /* Borda: Bege/Areia */
+            border-radius: 10px;
+            padding: 15px 25px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #01579B; /* Texto: Azul Escuro */
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            min-width: 70px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(255, 235, 172, 0.7);
+        }
+
+        .draggable-option:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(255, 235, 172, 1); }
+        .draggable-option.dragging { opacity: 0.4; }
+        .game-area.blocked .draggable-option { pointer-events: none; cursor: default; }
+
+        /* OPERAÇÃO MATEMÁTICA - Divisão e Multiplicação */
+        .math-operation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px; 
+            font-size: 28px;
+            font-weight: bold;
+            color: #E0E0E0;
+        }
+
+        .math-number {
+            background: rgba(30, 30, 30, 0.8);
+            border: 2px solid #FFEBAC; /* Destaque Secundário: Bege/Areia */
+            border-radius: 10px;
+            padding: 12px 20px; 
+            color: #FFEBAC; /* Destaque Secundário: Bege/Areia */
+            font-size: 28px;
+            font-weight: bold;
+            min-width: 60px; 
+            text-align: center;
+            text-shadow: 0 0 8px rgba(255, 235, 172, 0.7);
+        }
+
+        .math-operator {
+            color: #00BCD4; /* Destaque Principal: Ciano Claro */
+            font-size: 32px;
+            font-weight: bolder;
+            text-shadow: 0 0 10px rgba(0, 188, 212, 0.8);
+        }
+
+        /* DROP ZONE */
+        .drop-zone {
+            background: rgba(30, 30, 30, 0.9);
+            border: 4px dashed #00BCD4; /* Destaque Principal: Ciano Claro */
+            border-radius: 12px;
+            padding: 10px 20px;
+            min-width: 80px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00BCD4; /* Destaque Principal: Ciano Claro */
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.5s;
+        }
+
+        .drop-zone.drag-over { background: rgba(0, 188, 212, 0.2); box-shadow: 0 0 15px #00BCD4; }
+        .drop-zone.correct { background: #32CD32; border-color: #32CD32; box-shadow: 0 0 20px #32CD32; color: white; }
+        .drop-zone.incorrect { background: #FF4500; border-color: #FF4500; box-shadow: 0 0 20px #FF4500; color: white; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal.show { display: flex; }
+        .modal-content {
+            /* Fundo Escuro: Azul Marinho Transparente */
+            background: rgba(2, 62, 138, 0.98);
+            border: 5px solid #00BCD4; /* Destaque Principal: Ciano Claro */
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(0, 188, 212, 0.9);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .modal-content h2 { color: #FFEBAC; font-size: 28px; margin-bottom: 25px; text-shadow: 0 0 10px #FFEBAC; }
+        .modal-content p { color: #E0E0E0; font-size: 18px; margin: 15px 0; font-weight: 500; }
+        .modal-content p span { color: #00BCD4; font-size: 22px; font-weight: bold; text-shadow: 0 0 5px #00BCD4; }
+        
+        .modal-buttons { display: flex; flex-direction: column; gap: 15px; justify-content: center; margin-top: 30px; }
+
+        .modal-buttons button { border: none; border-radius: 10px; padding: 15px 30px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; min-width: 250px; }
+        
+        .modal-buttons .primary-button { background-color: #00BCD4; color: #01579B; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 188, 212, 0.5); }
+        .modal-buttons .secondary-button { background-color: #FFEBAC; color: #01579B; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 235, 172, 0.6); }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header-text-container">
+            <h1>Fase 7- Multiplicação e Divisão Simples 🌴</h1>
+            <p class="subtitle">Arraste e Solte a Resposta Correta! </div>
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">Acertos:</div>
+                <div class="score-value" id="correct">0/5</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Erros Totais:</div>
+                <div class="score-value" id="errors">0</div>
+            </div>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="game-area" id="gameArea">
+            <div class="options-container" id="optionsContainer"></div>
+
+            <div class="math-operation">
+                <div class="math-number" id="num1">8</div>
+                <div class="math-operator">÷</div>
+                <div class="math-number" id="num2">2</div>
+                <div class="math-operator">×</div>
+                <div class="math-number" id="num3">3</div>
+                <div class="math-operator">=</div>
+                <div class="drop-zone" id="dropZone">?</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Meta Atingida! 🎉</h2>
+            <div id="modalStats"></div>
+            <div class="modal-buttons" id="modalButtons">
+                <button class="primary-button">Carregando...</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        let correctAnswers = 0; 
+        let totalErrors = 0;    
+        let totalAttempts = 0;  
+        let draggedElement = null;
+        let answered = false;
+        
+        const TARGET_SCORE = 1; 
+        const FEEDBACK_DELAY = 1000; 
+
+        // PERGUNTAS DE OPERAÇÃO COMBINADA A ÷ B × C - FÁCIL
+        const questions = [
+            { num1: 8, num2: 2, num3: 3 },   
+            { num1: 15, num2: 3, num3: 2 },  
+            { num1: 10, num2: 5, num3: 4 },  
+            { num1: 12, num2: 4, num3: 5 },  
+            { num1: 6, num2: 3, num3: 4 },   
+            { num1: 20, num2: 5, num3: 3 },  
+            { num1: 16, num2: 4, num3: 2 },  
+            { num1: 9, num2: 3, num3: 5 },   
+            { num1: 14, num2: 2, num3: 3 },  
+            { num1: 12, num2: 2, num3: 4 }   
+        ];
+        
+        const totalQuestions = questions.length;
+
+        function calculateCorrectAnswer(q) {
+            // A ordem de operação é da esquerda para a direita (Divisão antes da Multiplicação)
+            return (q.num1 / q.num2) * q.num3;
+        }
+
+        function generateOptions() {
+            const correctAnswer = calculateCorrectAnswer(questions[currentQuestion]);
+            const options = [correctAnswer];
+            let attempts = 0;
+
+            // Gera 2 opções incorretas próximas para desafiar
+            while (options.length < 3 && attempts < 20) {
+                const randomOffset = Math.floor(Math.random() * 4) + 2; 
+                const sign = Math.random() < 0.5 ? 1 : -1;
+                let randomOption = correctAnswer + (randomOffset * sign);
+
+                // Garante que o número seja inteiro e positivo
+                if (randomOption > 0 && Number.isInteger(randomOption) && !options.includes(randomOption)) {
+                    options.push(randomOption);
+                }
+                attempts++;
+            }
+            return options.sort(() => Math.random() - 0.5);
+        }
+
+        function loadQuestion() {
+            if (correctAnswers >= TARGET_SCORE) {
+                 showGoalReachedModal(); 
+                 return;
+            }
+
+            if (currentQuestion >= totalQuestions) {
+                currentQuestion = 0; 
+                questions.sort(() => Math.random() - 0.5); 
+            }
+
+            answered = false;
+            draggedElement = null;
+            
+            const dropZone = document.getElementById('dropZone');
+            const gameArea = document.getElementById('gameArea');
+            const feedbackEl = document.getElementById('feedback');
+            
+            gameArea.classList.remove('blocked');
+            dropZone.classList.remove('correct', 'incorrect');
+            dropZone.textContent = '?';
+            feedbackEl.classList.remove('show', 'correct', 'incorrect');
+            feedbackEl.textContent = '';
+
+
+            const question = questions[currentQuestion];
+            document.getElementById('num1').textContent = question.num1;
+            document.getElementById('num2').textContent = question.num2;
+            document.getElementById('num3').textContent = question.num3; 
+
+            const options = generateOptions();
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            options.forEach(option => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'draggable-option';
+                optionEl.textContent = option;
+                optionEl.draggable = true;
+                optionEl.addEventListener('dragstart', handleDragStart);
+                optionEl.addEventListener('dragend', handleDragEnd);
+                optionsContainer.appendChild(optionEl);
+            });
+            
+            document.getElementById('correct').textContent = `${correctAnswers}/${TARGET_SCORE}`;
+            document.getElementById('errors').textContent = totalErrors;
+        }
+        
+        function handleDragStart(e) {
+            if(answered) { e.preventDefault(); return; }
+            draggedElement = e.target;
+            e.target.classList.add('dragging');
+            setTimeout(() => { e.target.style.visibility = 'hidden'; }, 0);
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            if (e.target.parentNode && e.target.parentNode.id === 'optionsContainer') {
+                e.target.style.visibility = 'visible';
+            }
+        }
+
+        function handleDragOver(e) {
+            if(!answered) {
+                e.preventDefault();
+                e.currentTarget.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const dropZone = e.currentTarget;
+            const gameArea = document.getElementById('gameArea');
+            const optionsContainer = document.getElementById('optionsContainer');
+            const feedbackEl = document.getElementById('feedback'); 
+
+            dropZone.classList.remove('drag-over');
+
+            if (answered || !draggedElement) return;
+            
+            answered = true;
+            gameArea.classList.add('blocked');
+
+            const selectedValue = parseInt(draggedElement.textContent);
+            
+            dropZone.textContent = selectedValue;
+            totalAttempts++; 
+
+            const correctAnswer = calculateCorrectAnswer(questions[currentQuestion]);
+
+            if (selectedValue === correctAnswer) {
+                correctAnswers++;
+                dropZone.classList.add('correct');
+                feedbackEl.textContent = '✅ Combinação Perfeita!';
+                feedbackEl.classList.remove('incorrect');
+                feedbackEl.classList.add('correct', 'show');
+                
+                if (draggedElement && draggedElement.parentNode) {
+                    draggedElement.remove();
+                }
+
+            } else {
+                totalErrors++;
+                dropZone.classList.add('incorrect');
+                feedbackEl.textContent = '❌ Tente novamente.';
+                feedbackEl.classList.remove('correct');
+                feedbackEl.classList.add('incorrect', 'show');
+                
+                optionsContainer.appendChild(draggedElement);
+                draggedElement.style.visibility = 'visible';
+            }
+            
+            draggedElement = null;
+
+            document.getElementById('correct').textContent = `${correctAnswers}/${TARGET_SCORE}`;
+            document.getElementById('errors').textContent = totalErrors;
+
+            setTimeout(() => {
+                currentQuestion++;
+                dropZone.classList.remove('correct', 'incorrect');
+                
+                loadQuestion();
+            }, FEEDBACK_DELAY);
+        }
+        
+        /* FUNÇÕES DE CONTROLE DO MODAL */
+        function showGoalReachedModal() {
+            document.getElementById('modalTitle').textContent = `Parabéns! Você atingiu a meta de ${TARGET_SCORE} acertos desta rodada.`;
+            
+            const totalCorrect = totalAttempts - totalErrors;
+            document.getElementById('modalStats').innerHTML = `
+                <p>Acertos Totais: <span>${totalCorrect}</span></p>
+                <p>Erros Totais: <span>${totalErrors}</span></p>
+                <p>Total de Tentativas: <span>${totalAttempts}</span></p>
+            `;
+
+
+            const modalButtons = document.getElementById('modalButtons');
+            modalButtons.innerHTML = `
+                <button class="primary-button" onclick="continuePhase()">Continuar na Fase</button>
+                <button class="secondary-button" onclick="showFinalStatsModal()">Mudar de Fase</button>
+            `;
+
+            document.getElementById('modal').classList.add('show');
+        }
+        
+        function continuePhase() {
+            document.getElementById('modal').classList.remove('show');
+            correctAnswers = 0; 
+            loadQuestion();
+        }
+
+        function showFinalStatsModal() {
+            document.getElementById('modalTitle').textContent = 'Resultados Finais dos Exploradores da Selva';
+            
+            // Reutiliza as estatísticas
+            document.getElementById('modalStats').innerHTML = document.getElementById('modalStats').innerHTML;
+
+            const modalButtons = document.getElementById('modalButtons');
+            modalButtons.innerHTML = `
+                <button class="secondary-button" onclick="goToPreviousPhase()">← Outra Fase</button>
+                <button class="primary-button" onclick="goToNextPhase()">Próxima Fase →</button>
+            `;
+        }
+        
+        function goToPreviousPhase() {
+             document.getElementById('modal').classList.remove('show');
+             alert('Você escolheu ir para Outra Fase! Reiniciando o jogo.');
+             window.location.href = '../fase 6/fase_6.html'; 
+        }
+
+        function goToNextPhase() {
+             document.getElementById('modal').classList.remove('show');
+             alert('Você escolheu ir para a Próxima Fase! (Seria carregada a próxima operação).');
+            window.location.href = '../fase 8/fase_8.html'; 
+        }
+
+
+        // Event Listeners para a Drop Zone
+        const dropZone = document.getElementById('dropZone');
+        dropZone.addEventListener('dragover', handleDragOver);
+        dropZone.addEventListener('dragleave', handleDragLeave);
+        dropZone.addEventListener('drop', handleDrop);
+
+        // Inicia o jogo
+        loadQuestion();
+    </script>
+</body>
+</html>

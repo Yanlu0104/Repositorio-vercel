@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        /* ESTILOS GERAIS - TEMA NEON/DARK */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            /* Fundo Escuro com Imagem Neon */
+            /* Certifique-se de que o caminho da imagem está correto! */
+            background-image: url('imagem_5/vezes_52.jpg'); 
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        
+        }
+
+        /* Ocultar Barras de Rolagem (para navegadores Webkit) */
+        ::-webkit-scrollbar { display: none; }
+
+
+        .game-container {
+            background: rgba(0, 0, 0, 0);
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 0 30px rgba(97, 218, 251, 0.4);
+            border: 2px solid #61dafb;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            max-height: 95vh;
+        }
+        
+        /* NOVO CONTÊINER PARA MELHORAR A LEGIBILIDADE DO TÍTULO E SUBTÍTULO */
+        .header-text-container {
+            background: rgba(0, 0, 0, 0.5); /* Fundo Preto Semi-Transparente */
+            padding: 20px 10px 10px; /* Espaçamento interno */
+            margin-bottom: 5px;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            text-align: center; 
+        }
+
+        /* TÍTULO CORRIGIDO PARA MELHOR LEGIBILIDADE */
+        h1 {
+            text-align: center;
+            color: #E064F2; /* Cor: Roxa */
+            font-size: 40px; 
+            margin-bottom: 10px; 
+            text-shadow: 0 0 15px rgba(224, 100, 242, 0.9);
+        }
+
+        /* SUBTÍTULO CORRIGIDO PARA MELHOR LEGIBILIDADE */
+        .subtitle {
+            text-align: center;
+            color: #61dafb; /* Cor: Ciano Neon */
+            font-size: 22px; 
+            margin-bottom: 0; 
+            text-shadow: 0 0 8px rgba(97, 218, 251, 0.7);
+        }
+        
+        /* PLACAR */
+        .score-board {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #FFD700;
+            border-radius: 10px;
+            padding: 10px 20px;
+        }
+
+        .score-item {
+            padding: 5px 10px;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .score-label {
+            color: #E0E0E0;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .score-value {
+            color: #61dafb;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(97, 218, 251, 0.8);
+        }
+
+        /* FEEDBACK DE ACERTO/ERRO IMEDIATO */
+        .feedback {
+            min-height: 40px; 
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding: 5px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s, background-color 0.3s, transform 0.3s;
+        }
+
+        .feedback.show {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .feedback.correct {
+            background: rgba(50, 205, 50, 0.8); 
+            color: white;
+            box-shadow: 0 0 15px rgba(50, 205, 50, 0.7);
+        }
+
+        .feedback.incorrect {
+            background: rgba(255, 69, 0, 0.8); 
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.7);
+        }
+
+        .game-area {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #61dafb;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 0 15px rgba(97, 218, 251, 0.5);
+        }
+
+        /* OPÇÕES DE ARRASTAR */
+        .options-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 10px;
+        }
+
+        .draggable-option {
+            background: #FFD700;
+            border: 2px solid #FFECB3;
+            border-radius: 10px;
+            padding: 15px 25px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            min-width: 70px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .draggable-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+
+        .draggable-option.dragging {
+            opacity: 0.4;
+        }
+        
+        /* BLOQUEIA INTERAÇÃO ENQUANTO O DROP ESTÁ EM PROCESSAMENTO */
+        .game-area.blocked .draggable-option {
+            pointer-events: none;
+            cursor: default;
+        }
+        
+        .draggable-option.disabled {
+            opacity: 0.5;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        /* OPERAÇÃO MATEMÁTICA */
+        .math-operation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #E0E0E0;
+        }
+
+        .math-number {
+            background: rgba(30, 30, 30, 0.8);
+            border: 2px solid #FFD700;
+            border-radius: 10px;
+            padding: 12px 25px;
+            color: #FFD700;
+            font-size: 28px;
+            font-weight: bold;
+            min-width: 70px;
+            text-align: center;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+        }
+
+        .math-operator {
+            color: #61dafb;
+            font-size: 32px;
+            font-weight: bolder;
+            text-shadow: 0 0 10px rgba(97, 218, 251, 0.8);
+        }
+
+        /* DROP ZONE (Animação Lenta) */
+        .drop-zone {
+            background: rgba(30, 30, 30, 0.9);
+            border: 4px dashed #FFD700;
+            border-radius: 12px;
+            padding: 10px 20px;
+            min-width: 80px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFD700;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.5s;
+        }
+
+        .drop-zone.drag-over {
+            background: rgba(97, 218, 251, 0.2);
+            box-shadow: 0 0 15px #61dafb;
+        }
+
+        .drop-zone.correct {
+            background: #32CD32;
+            border-color: #32CD32;
+            box-shadow: 0 0 20px #32CD32;
+            color: white;
+        }
+
+        .drop-zone.incorrect {
+            background: #FF4500;
+            border-color: #FF4500;
+            box-shadow: 0 0 20px #FF4500;
+            color: white;
+        }
+
+        /* BOTÕES */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            min-height: 50px;
+        }
+
+        button {
+            background: #FFD700;
+            color: #333;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
+        button:hover {
+            background: #FFEE99;
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px #FFEE99;
+        }
+        
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(0, 49, 80, 0.98);
+            border: 5px solid #61dafb;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(97, 218, 251, 0.9);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .modal-content h2 {
+            color: #FFD700;
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px #FFD700;
+        }
+
+        .modal-content p {
+            color: #E0E0E0;
+            font-size: 18px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        .modal-content p span {
+            color: #61dafb;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 0 0 5px #61dafb;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .modal-buttons button {
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            min-width: 250px;
+        }
+
+        /* ESTILOS DE BOTÕES PARA NAVEGAÇÃO FINAL */
+        .modal-buttons .nav-button {
+            background-color: #61dafb;
+            color: #282c34;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(97, 218, 251, 0.5);
+        }
+        
+        .modal-buttons .back-button {
+            background-color: #FFD700;
+            color: #1a3a4e;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.6);
+        }
+        
+        .modal-buttons .back-button:hover {
+             background-color: #FFEE99;
+             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 25px #FFEE99;
+        }
+        
+        /* ESTILOS DE BOTÕES PARA OPÇÃO DE CONTINUAR */
+        .modal-buttons .continue-button {
+            background-color: #32CD32; /* Verde para continuar */
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(50, 205, 50, 0.7);
+        }
+        
+        .modal-buttons .stop-button {
+            background-color: #FF4500; /* Vermelho/Laranja para parar */
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 69, 0, 0.7);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header-text-container">
+            <h1>Fase 5- Vamos aprender a multiplicação simples</h1>
+            <p class="subtitle">Arraste e Solte a Resposta Correta!</p>
+        </div>
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">Acertos:</div>
+                <div class="score-value" id="correct">0/5</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Erros Totais:</div>
+                <div class="score-value" id="errors">0</div>
+            </div>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="game-area" id="gameArea">
+            <div class="options-container" id="optionsContainer"></div>
+
+            <div class="math-operation">
+                <div class="math-number" id="num1">3</div>
+                <div class="math-operator">×</div>
+                <div class="math-number" id="num2">4</div>
+                <div class="math-operator">=</div>
+                <div class="drop-zone" id="dropZone">?</div>
+            </div>
+
+            <div class="button-container">
+                <button id="nextBtn" style="display: none;">Ver Resultado</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Meta Atingida! 🎉</h2>
+            <p id="modalRoundCorrect" style="display:none;">Acertos na Rodada: <span id="modalCorrect">0</span></p>
+            <p id="modalRoundErrors" style="display:none;">Erros na Rodada: <span id="modalErrors">0</span></p>
+            
+            <div class="modal-buttons" id="modalButtonsContinue">
+                </div>
+            
+            <div class="modal-buttons" id="modalButtonsFinal" style="display: none;">
+                </div>
+            
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        let correctAnswers = 0; 
+        let totalErrors = 0; // Erros na Rodada
+        let totalAttempts = 0; // Tentativas na Rodada
+        let draggedElement = null;
+        let answered = false;
+        
+        const TARGET_SCORE = 1; // A meta é sempre 5.
+        const DISPLAY_ROUND_TARGET = 5; // A meta para exibição é sempre 5.
+        const FEEDBACK_DELAY = 1000; 
+
+        // Variáveis Acumuladas (Para o Modal Final)
+        let totalCorrectOverall = 0;
+        let totalErrorsOverall = 0;
+        let totalAttemptsOverall = 0;
+
+        // Lista de perguntas (Corrigida e completa)
+        const questions = [
+            { num1: 3, num2: 4 },   
+            { num1: 2, num2: 8 },   
+            { num1: 5, num2: 3 },   
+            { num1: 4, num2: 4 },   
+            { num1: 2, num2: 9 },   
+            { num1: 3, num2: 6 },   
+            { num1: 4, num2: 5 }    
+        ];
+        
+        const totalQuestions = questions.length;
+
+        function generateOptions() {
+            const correctAnswer = questions[currentQuestion].num1 * questions[currentQuestion].num2;
+            const options = [correctAnswer];
+
+            while (options.length < 3) {
+                const randomOption = Math.floor(Math.random() * 15) + 6;
+                if (!options.includes(randomOption) && randomOption !== correctAnswer) {
+                    options.push(randomOption);
+                }
+            }
+            return options.sort(() => Math.random() - 0.5);
+        }
+
+        function loadQuestion() {
+            // Verifica se a meta de 5 acertos da rodada foi alcançada
+            if (correctAnswers >= TARGET_SCORE) {
+                 showRoundCompletionModal();
+                 return;
+            }
+
+            if (currentQuestion >= totalQuestions) {
+                // Reinicia o índice de perguntas se todas foram usadas
+                currentQuestion = 0;
+            }
+
+            answered = false;
+            draggedElement = null;
+            
+            const dropZone = document.getElementById('dropZone');
+            const gameArea = document.getElementById('gameArea');
+            
+            gameArea.classList.remove('blocked');
+            
+            dropZone.classList.remove('correct', 'incorrect');
+            dropZone.textContent = '?';
+
+            const question = questions[currentQuestion];
+            document.getElementById('num1').textContent = question.num1;
+            document.getElementById('num2').textContent = question.num2;
+
+            const options = generateOptions();
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            options.forEach(option => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'draggable-option';
+                optionEl.textContent = option;
+                optionEl.draggable = true;
+                optionEl.addEventListener('dragstart', handleDragStart);
+                optionEl.addEventListener('dragend', handleDragEnd);
+                optionsContainer.appendChild(optionEl);
+            });
+            
+            // Placar exibido como X/5
+            document.getElementById('correct').textContent = `${correctAnswers}/${DISPLAY_ROUND_TARGET}`;
+            document.getElementById('errors').textContent = totalErrors;
+        }
+        
+        function handleDragStart(e) {
+            if(answered) { e.preventDefault(); return; }
+            draggedElement = e.target;
+            e.target.classList.add('dragging');
+            setTimeout(() => { e.target.style.visibility = 'hidden'; }, 0);
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            if (e.target.parentNode && e.target.parentNode.id === 'optionsContainer') {
+                e.target.style.visibility = 'visible';
+            }
+        }
+
+        function handleDragOver(e) {
+            if(!answered) {
+                e.preventDefault();
+                e.currentTarget.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const dropZone = e.currentTarget;
+            const gameArea = document.getElementById('gameArea');
+            const optionsContainer = document.getElementById('optionsContainer');
+            const feedbackEl = document.getElementById('feedback'); 
+
+            dropZone.classList.remove('drag-over');
+
+            if (answered || !draggedElement) return;
+            
+            answered = true;
+            gameArea.classList.add('blocked');
+
+            const selectedValue = parseInt(draggedElement.textContent);
+            
+            draggedElement.style.visibility = 'visible';
+            dropZone.textContent = selectedValue;
+            
+            // Contagem da rodada e total
+            totalAttempts++;
+            totalAttemptsOverall++; 
+
+            const correctAnswer = questions[currentQuestion].num1 * questions[currentQuestion].num2;
+
+            if (selectedValue === correctAnswer) {
+                correctAnswers++;
+                totalCorrectOverall++; 
+                dropZone.classList.add('correct');
+                
+                // Feedback Certo
+                feedbackEl.textContent = '✅ Certo! Parabéns!';
+                feedbackEl.classList.remove('incorrect');
+                feedbackEl.classList.add('correct', 'show');
+                
+                if (draggedElement && draggedElement.parentNode) {
+                    draggedElement.remove();
+                }
+
+            } else {
+                totalErrors++;
+                totalErrorsOverall++; 
+                dropZone.classList.add('incorrect');
+                
+                // Feedback Errado
+                feedbackEl.textContent = '❌ Tente novamente.';
+                feedbackEl.classList.remove('correct');
+                feedbackEl.classList.add('incorrect', 'show');
+                
+                optionsContainer.appendChild(draggedElement);
+                draggedElement.style.visibility = 'visible';
+            }
+            
+            draggedElement = null;
+
+            // Atualiza placares
+            document.getElementById('correct').textContent = `${correctAnswers}/${DISPLAY_ROUND_TARGET}`;
+            document.getElementById('errors').textContent = totalErrors;
+
+            setTimeout(() => {
+                currentQuestion++;
+                dropZone.classList.remove('correct', 'incorrect');
+                
+                // Limpa o feedback
+                feedbackEl.classList.remove('show', 'correct', 'incorrect');
+                feedbackEl.textContent = '';
+                
+                loadQuestion();
+            }, FEEDBACK_DELAY);
+        }
+
+        function showRoundCompletionModal() {
+            // O título informa que 5 acertos foram alcançados (TARGET_SCORE)
+            document.getElementById('modalTitle').textContent = `Parabéns! Você alcançou ${TARGET_SCORE} acertos!`;
+            
+            document.getElementById('modalRoundCorrect').style.display = 'none';
+            document.getElementById('modalRoundErrors').style.display = 'none';
+
+            // Modal simplificado (apenas Continuar e Mudar de Fase)
+            const buttonsHtml = `
+                <button class="continue-button" onclick="continuePhase()">
+                    Continuar e Recomeçar (0/${DISPLAY_ROUND_TARGET})
+                </button>
+                <button class="stop-button" onclick="showFinalModal()">
+                    Mudar de Fase
+                </button>
+            `;
+
+            document.getElementById('modalButtonsContinue').innerHTML = buttonsHtml;
+            document.getElementById('modalButtonsContinue').style.display = 'flex';
+            document.getElementById('modalButtonsFinal').style.display = 'none';
+
+            document.getElementById('modal').classList.add('show');
+        }
+
+        function continuePhase() {
+            // Mantém a meta fixa em 5. Apenas reseta a contagem da rodada para 0/5.
+            correctAnswers = 0; 
+            totalErrors = 0;
+            totalAttempts = 0;
+            
+            document.getElementById('modal').classList.remove('show');
+            loadQuestion();
+        }
+
+        function showFinalModal() {
+            document.getElementById('modalTitle').textContent = 'Fase 5 Encerrada! 🚀';
+
+            // Exibe o somatório total (acertos totais, erros totais, tentativas totais)
+            const finalStatsHTML = `
+                <p>Acertos Totais: <span style="color: #32CD32;">${totalCorrectOverall}</span></p>
+                <p>Erros Totais: <span style="color: #FF4500;">${totalErrorsOverall}</span></p>
+                <p>Total de Tentativas: <span>${totalAttemptsOverall}</span></p>
+                <div class="modal-buttons">
+                    <button id="btnPreviousPhase" class="back-button" onclick="goToPreviousPhase()">
+                        ← Fase Anterior
+                    </button>
+                    <button id="btnNextPhase" class="nav-button" onclick="goToNextPhase()">
+                        Próxima Fase →
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('modalButtonsFinal').innerHTML = finalStatsHTML;
+            document.getElementById('modalButtonsContinue').style.display = 'none';
+            document.getElementById('modalButtonsFinal').style.display = 'flex';
+
+            document.getElementById('modal').classList.add('show');
+        }
+        
+        function goToPreviousPhase() {
+            // Ação: Se você tiver uma URL de fase anterior, descomente e use a linha abaixo:
+             window.location.href = '../fase 4/fase_4.html';
+            
+            // Simula a navegação apenas fechando o modal
+            document.getElementById('modal').classList.remove('show');
+        }
+
+        function goToNextPhase() {
+            // Ação: Se você tiver uma URL de próxima fase, descomente e use a linha abaixo:
+             window.location.href = '../fase 6/fase_6.html';
+            
+            // Simula a navegação apenas fechando o modal
+            document.getElementById('modal').classList.remove('show');
+        }
+
+        // Event Listeners para a Drop Zone
+        const dropZone = document.getElementById('dropZone');
+        dropZone.addEventListener('dragover', handleDragOver);
+        dropZone.addEventListener('dragleave', handleDragLeave);
+        dropZone.addEventListener('drop', handleDrop);
+
+        // Inicia o jogo
+        loadQuestion();
+    </script>
+</body>
+</html>

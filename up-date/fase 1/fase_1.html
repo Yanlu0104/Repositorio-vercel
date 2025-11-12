@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fase 1: Vamos Aprender a Contar com as Frutas</title>
+
+
+    <style>
+
+        /* Importar fonte do Google Fonts para um visual mais "clean" */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+        body {
+
+            font-family: 'Montserrat', sans-serif; /* Fonte mais moderna e legível */
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center; /* Centraliza verticalmente também */
+
+            min-height: 100vh; /* Ocupa 100% da altura da viewport */
+
+            margin: 0;
+
+            padding: 20px;
+
+            
+            /* IMAGEM DE FUNDO AQUI */
+
+            background-image: url('foto_perdida/fruta_perdida.jpg'); /* Caminho da sua imagem */
+
+            background-size: cover; /* Cobre todo o espaço disponível */
+
+            background-position: center; /* Centraliza a imagem */
+
+            background-repeat: no-repeat; /* Evita repetição */
+
+            background-attachment: fixed; /* Fixa a imagem no fundo ao rolar */
+
+            color: #000000; /* Cor de texto padrão */
+
+        }
+
+
+
+        .ilha-container {
+
+            background-color: rgba(255, 255, 255, 0); /* Fundo branco semi-transparente para destacar */
+
+            border-radius: 25px;
+
+            padding: 30px;
+
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.221); /* Sombra mais acentuada */
+
+            text-align: center;
+
+            width: 90%;
+
+            max-width: 750px; /* Um pouco mais largo */
+
+            border: 5px solid #6C4830; /* Borda de tronco */
+
+
+            animation: fadeIn 1s ease-out; /* Animação de entrada */
+
+        }
+
+
+
+        @keyframes fadeIn {
+
+            from { opacity: 0; transform: translateY(-20px); }
+
+            to { opacity: 1; transform: translateY(0); }
+
+        }
+
+
+
+        h1 {
+
+            color: #011254; /* Azul */
+
+            font-size: 2.5em; /* Título maior */
+
+            text-shadow: 2px 2px 0 rgba(255, 255, 255, 0); /* Sombra mais pronunciada */
+
+            margin-bottom: 10px;
+
+            font-family: 'Montserrat', sans-serif;
+
+            font-weight: 700;
+
+        }
+
+
+
+        .macaquinho {
+
+            font-size: 70px; /* Macaquinho maior */
+
+            margin-bottom: 15px;
+            
+        }
+
+        
+
+        /* ESTILOS DA LISTA DE FRUTAS REMOVIDOS AQUI */
+
+        /* .lista-frutas-disponiveis { ... } */
+        /* .fruta-item { ... } */
+
+
+        .frutas-container {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            margin: 25px auto; /* Mais espaçamento */
+
+            border: 3px solid #FFD700; /* Dourado */
+
+            padding: 20px; /* Mais preenchimento */
+
+            background-color: #fff8e100; /* Fundo claro para frutas */
+
+            min-height: 120px;
+
+            border-radius: 15px; /* Bordas arredondadas */
+
+        }
+
+
+
+        .fruta {
+
+            font-size: 45px; /* Frutas maiores */
+
+            margin: 10px; /* Mais espaçamento entre frutas */
+
+            user-select: none;
+
+        }
+
+
+
+        .desafio-area {
+
+            font-size: 1.6em; /* Texto maior */
+
+            margin-bottom: 25px;
+
+            font-weight: bold;
+
+            color:  #011254
+
+        }
+
+
+
+        input[type="number"] {
+
+            padding: 15px; /* Mais preenchimento */
+
+            font-size: 1.4em; /* Fonte maior */
+
+            width: 100px;
+
+            text-align: center;
+
+            border: 3px solid #6C4830;
+
+            border-radius: 10px; /* Bordas mais arredondadas */
+
+            background-color: #fcfcfc71;
+
+        }
+
+
+
+        button {
+
+            padding: 15px 30px; /* Mais preenchimento */
+
+            font-size: 1.4em; /* Fonte maior */
+
+            background-color: #FF6347; /* Tomate */
+
+            color: rgb(255, 255, 255);
+
+            border: none;
+
+            border-radius: 10px; /* Bordas mais arredondadas */
+
+            cursor: pointer;
+
+            margin-left: 20px; /* Mais espaçamento */
+
+            box-shadow: 0 5px #CD5C5C;
+
+            transition: all 0.1s;
+
+        }
+
+
+
+        button:active {
+
+            box-shadow: 0 2px #CD5C5C;
+
+            transform: translateY(3px);
+
+        }
+
+        
+
+        button:disabled {
+
+            background-color: #cccccc00;
+
+            box-shadow: none;
+
+            cursor: default;
+
+        }
+
+
+
+        .mensagem {
+
+            margin-top: 30px;
+
+            font-size: 1.8em; /* Mensagem maior */
+
+            font-weight: bold;
+
+        }
+
+
+
+        .progresso {
+
+            margin-bottom: 20px;
+
+            font-size: 1.2em;
+
+            color: #4B0082;
+
+            font-weight: bold;
+
+        }
+
+
+
+        .vitoria {
+
+            background-color: #4CAF50;
+
+            color: rgba(255, 255, 255, 0.436);
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            font-size: 1.5em;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+    <div class="ilha-container">
+
+        <h1>Fase 1: Vamos Aprender a Contar com as Frutas</h1> <p class="macaquinho tico">🐵</p>
+
+        
+
+        <div id="progresso" class="progresso"></div>
+
+
+
+        <div id="desafio-area" class="desafio-area"></div>
+
+
+
+        <div id="frutas-container" class="frutas-container">
+
+        </div>
+
+
+
+        <div id="resposta-container" class="resposta-area">
+
+            <label for="resposta">Minha contagem é:</label>
+
+            <input type="number" id="resposta" min="0">
+
+            <button id="btn-verificar" onclick="verificarResposta()">Verificar</button>
+
+        </div>
+
+        
+
+        <p id="mensagem" class="mensagem"></p>
+
+    </div>
+
+
+
+    <script>
+
+        // --- CONFIGURAÇÃO DO JOGO ---
+        const ACERTOS_NECESSARIOS = 1;
+        
+        // Mapeamento das frutas (Emoji: Nome)
+        const FRUTAS_MAP = {
+            '🍌': 'a Banana',
+            '🥥': 'o Coco',
+            '🍍': 'o Abacaxi',   
+            '🥭': 'a Manga',   
+            '🍉': 'a Melancia',
+            '🥝': 'o Kiwi'
+        };
+        
+        // Array dos Emojis para sorteio
+        const FRUTAS_EMOJIS = Object.keys(FRUTAS_MAP); 
+        
+        const MIN_FRUTAS = 5; 
+        const MAX_FRUTAS = 9; 
+
+        let acertos = 0;
+        let quantidadeAlvo = 0;
+        let frutaEmojiAtual = ''; // Variável para guardar o emoji
+        let frutaNomeAtual = '';  // Variável para guardar o nome da fruta
+        
+        // --- ELEMENTOS DO DOM ---
+        const frutasContainer = document.getElementById('frutas-container');
+        const mensagemElement = document.getElementById('mensagem');
+        const desafioArea = document.getElementById('desafio-area');
+        const progressoElement = document.getElementById('progresso');
+        const respostaInput = document.getElementById('resposta');
+        const respostaContainer = document.getElementById('resposta-container');
+        const btnVerificar = document.getElementById('btn-verificar');
+
+        // Função utilitária para gerar número aleatório
+        function gerarNumeroAleatorio(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // Função utilitária para escolher uma fruta aleatória
+        function escolherFrutaAleatoria() {
+            const indice = gerarNumeroAleatorio(0, FRUTAS_EMOJIS.length - 1);
+            return FRUTAS_EMOJIS[indice];
+        }
+        
+        // Função para controlar o estado dos botões e inputs
+        function setControleBotoes(desabilitado) {
+            btnVerificar.disabled = desabilitado;
+            respostaInput.disabled = desabilitado;
+        }
+
+        // 1. Cria um novo enigma aleatório
+        function gerarNovoEnigma() {
+            setControleBotoes(false);
+
+            quantidadeAlvo = gerarNumeroAleatorio(MIN_FRUTAS, MAX_FRUTAS);
+            
+            frutaEmojiAtual = escolherFrutaAleatoria(); // Sorteia o emoji
+            frutaNomeAtual = FRUTAS_MAP[frutaEmojiAtual]; // Pega o nome
+            
+            // Atualiza o progresso
+            progressoElement.textContent = "Acertos: " + acertos + " de " + ACERTOS_NECESSARIOS; // CORREÇÃO: Uso correto de "de"
+
+            // Texto do desafio (mantendo o pássaro e o nome da fruta)
+            desafioArea.textContent = "O pássaro 🐦 roubou  " + frutaNomeAtual + " (" + frutaEmojiAtual + "). Conte quantas ele deixou para trás!"; // CORREÇÃO: "quantas" para concordar com frutas.
+
+
+            frutasContainer.innerHTML = '';
+            for (let i = 0; i < quantidadeAlvo; i++) {
+                const fruta = document.createElement('span');
+                fruta.className = 'fruta';
+                fruta.textContent = frutaEmojiAtual; // Continua mostrando apenas o emoji no grid das frutas
+                frutasContainer.appendChild(fruta);
+            }
+
+            respostaInput.value = '';
+            mensagemElement.textContent = '';
+        }
+
+        // 2. Verifica a resposta do jogador
+        function verificarResposta() {
+            setControleBotoes(true);
+
+            const respostaUsuario = parseInt(respostaInput.value);
+
+            if (isNaN(respostaUsuario)) {
+                mensagemElement.textContent = "Ops! Digite um número para que o macaquinho possa verificar."; // CORREÇÃO: "para que"
+                mensagemElement.style.color = 'darkred';
+                setControleBotoes(false);
+                return;
+            }
+
+            if (respostaUsuario === quantidadeAlvo) {
+                acertos++;
+                // Mensagem de acerto
+                mensagemElement.textContent = "✅ Certo! " + quantidadeAlvo + " frutas salvas! Faltam " + (ACERTOS_NECESSARIOS - acertos) + " acertos para a próxima fase!"; // CORREÇÃO: "Faltam" em vez de "Mais" para melhor clareza.
+                mensagemElement.style.color = '#006400';
+
+                if (acertos >= ACERTOS_NECESSARIOS) {
+                    setTimeout(finalizarFase, 1500);
+                } else {
+                    setTimeout(gerarNovoEnigma, 1500);
+                }
+
+            } else {
+                // Mensagem de erro
+                mensagemElement.textContent = "❌ Ah não! Tente novamente. O macaquinho precisa de ajuda!"; // CORREÇÃO: "novamente" em vez de "de novo" para melhor fluidez.
+                mensagemElement.style.color = 'darkred';
+
+                setTimeout(() => {
+                    mensagemElement.textContent = '';
+                    gerarNovoEnigma();
+                }, 1000);
+            }
+        }
+
+        // 3. Finaliza a fase
+        function finalizarFase() {
+    setControleBotoes(true);
+    desafioArea.textContent = "🎉 VITÓRIA! VOCÊ RESGATOU TODAS AS FRUTAS! 🎉";
+    frutasContainer.innerHTML = '<span style="font-size: 80px;">🏆</span>';
+    progressoElement.textContent = "Fase 1 Concluída!";
+
+    respostaContainer.innerHTML = `
+        <div class="vitoria">O Macaquinho está pronto para a Fase 2 (Adição)!</div>
+        <button id="btnProximaFase" style="margin-top: 16px; padding: 10px 24px; font-size: 16px; background: #F6C700; color: #222; border-radius: 8px; border: none; cursor: pointer;">
+            👉 Ir para a próxima fase
+        </button>
+    `;
+
+    // Adiciona o evento de clique ao botão recém-criado
+    document.getElementById('btnProximaFase').onclick = function() {
+        window.location.href = '../fase 2/fase_2.html';
+    };
+}
+        // Inicia o jogo
+        gerarNovoEnigma();
+       
+    </script>
+
+</body>
+</html>

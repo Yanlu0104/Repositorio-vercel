@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Ilha do Saber: A História do Tico </title>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+
+
+    <style>
+        /* ========================================================================= */
+        /* ANIMAÇÕES GERAIS */
+        /* ========================================================================= */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.02); filter: brightness(1.1); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+        @keyframes fadeOutUp {
+            to { opacity: 0; transform: translateY(-30px); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOutSlide {
+            to { opacity: 0; transform: scale(0.9); }
+        }
+        @keyframes fadeInSlide {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        /* Efeito Jelly para cliques */
+        @keyframes jellyBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+
+        /* ========================================================================= */
+        /* ESTILOS GERAIS E FUNDO (ILHA DO SABER) */
+        /* ========================================================================= */
+        html, body {
+            min-height: 100vh; 
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; 
+        }
+        body {
+            font-family: 'Bubblegum Sans', 'Arial Rounded MT Bold', sans-serif;
+            
+            /* FUNDO DA ILHA */
+            background-image: url('imagem_fundo/ilha_saber2.jpg');
+            background-size: cover; 
+            background-repeat: no-repeat; 
+            background-position: center center; 
+            background-attachment: fixed; 
+            background-color: #87CEEB; 
+
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            
+            padding: 30px 0; 
+            
+            color: #333;
+            animation: fadeIn 1.5s ease-out; 
+            position: relative; 
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0); 
+            padding: 50px 50px;
+            border-radius: 40px; 
+            box-shadow: 
+                0 0 40px rgba(0, 0, 0, 0.105), 
+                inset 0 0 10px rgba(255, 255, 255, 0); 
+            
+            text-align: center;
+            width: 90%;
+            max-width: 750px; 
+            min-height: 500px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s ease-out;
+            
+            margin: 30px auto; 
+            backdrop-filter: blur(1px); 
+            -webkit-backdrop-filter: blur(1px); 
+        }
+        .container:hover {
+            transform: scale(1.01);
+            box-shadow: 
+                0 0 50px rgba(0, 0, 0, 0.5), 
+                inset 0 0 10px rgba(255, 255, 255, 0.13);
+        }
+
+        /* ========================================================================= */
+        /* TÍTULOS E TEXTOS */
+        /* ========================================================================= */
+
+        h1, h2 { /* Combinando h1 e h2 para ter o mesmo estilo de título */
+            color: #1e3a5f;
+            font-size: 3.5em; 
+            margin-bottom: 20px;
+            text-shadow: 
+                0 0 10px #70e6db, 
+                0 0 20px rgba(0,0,0,0.7), 
+                3px 3px 0px rgba(0, 0, 0, 0.3); 
+            animation: pulse 2s infinite alternate; 
+        }
+
+        p {
+            font-size: 1.5em; 
+            color: #000000; 
+            line-height: 1.6;
+            /* MELHORIA DE VISIBILIDADE: Sombra branca mais espessa para maior contraste */
+            text-shadow: 
+                2px 2px 0 #fff,  /* Sombra mais forte */
+                -2px -2px 0 #fff,
+                2px -2px 0 #fff, 
+                -2px 2px 0 #fff,
+                3px 3px 3px rgba(0,0,0,0.15); /* Sombra escura sutil */
+        }
+        
+        label {
+            font-size: 1.6em; 
+            color: #000000; 
+            margin-top: 35px;
+            /* MELHORIA DE VISIBILIDADE: Sombra branca mais espessa para maior contraste */
+            text-shadow: 
+                2px 2px 0 #fff, 
+                -2px -2px 0 #fff,
+                2px -2px 0 #fff, 
+                -2px 2px 0 #fff; 
+        }
+
+        /* ========================================================================= */
+        /* BOTÕES (EFEITO JELLY BUTTON APLICADO) */
+        /* ========================================================================= */
+
+        .btn-acao {
+            font-size: 2em; 
+            padding: 20px 50px; 
+            border-radius: 60px; 
+            margin-top: 50px;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1.2); 
+            box-shadow: 
+                0 15px 30px rgba(0,0,0,0.4), 
+                0 0 15px rgba(255, 255, 255, 0.7) inset, 
+                0 7px 0px rgba(0,0,0,0.2); 
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+            color: white; 
+            border: none;
+            cursor: pointer;
+            display: inline-flex; 
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-acao:hover {
+            transform: translateY(-8px) scale(1.07); 
+            box-shadow: 
+                0 25px 40px rgba(0,0,0,0.5),
+                0 0 25px rgba(255, 255, 255, 1) inset,
+                0 10px 0px rgba(0,0,0,0.3); 
+        }
+        /* EFEITO JELLY: Comprime e usa a animação de retorno */
+        .btn-acao:active {
+            transform: translateY(2px) scale(0.95); 
+            box-shadow: 
+                0 5px 10px rgba(0,0,0,0.2),
+                0 0 5px rgba(255, 255, 255, 0.5) inset,
+                0 2px 0px rgba(0,0,0,0.1); 
+            animation: none; 
+        }
+
+        /* Cores e variações dos botões (TEMÁTICAS) */
+        #btnComecarRegistro { 
+            background-color: #00897B; 
+        } 
+        #btnComecarRegistro:hover { 
+            background-color: #26A69A; 
+        }
+        /* Cor de sombra inferior para 3D do botão */
+        #btnComecarRegistro:active { box-shadow: 0 5px 0px #005f56; } 
+        #btnComecarRegistro { box-shadow: 0 7px 0px #005f56, 0 15px 30px rgba(0,0,0,0.4), inset 0 0 15px rgba(255, 255, 255, 0.7); }
+        #btnComecarRegistro:hover { box-shadow: 0 10px 0px #005f56, 0 25px 40px rgba(0,0,0,0.5), inset 0 0 25px rgba(255, 255, 255, 1); }
+
+        #btnVoltarHistoria { 
+            background-color: #4DD0E1; 
+            font-size: 1.5em; 
+            padding: 15px 35px;
+            margin-top: 25px; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        #btnVoltarHistoria:hover { 
+            background-color: #80DEEA; 
+        }
+        /* Cores de sombra inferior para 3D dos botões de navegação */
+        #btnVoltarHistoria:active { box-shadow: 0 5px 0px #00ACC1; }
+        #btnVoltarHistoria { box-shadow: 0 7px 0px #00ACC1, 0 15px 30px rgba(0,0,0,0.4), inset 0 0 15px rgba(255, 255, 255, 0.7); }
+        #btnVoltarHistoria:hover { box-shadow: 0 10px 0px #00ACC1, 0 25px 40px rgba(0,0,0,0.5), inset 0 0 25px rgba(255, 255, 255, 1); }
+        
+        #btnAvancarHistoria { 
+            background-color: #FF7043; 
+            font-size: 1.5em;
+            padding: 15px 35px;
+            margin-top: 25px; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        #btnAvancarHistoria:hover { 
+            background-color: #FF8A65; 
+        }
+        /* Cores de sombra inferior para 3D dos botões de navegação */
+        #btnAvancarHistoria:active { box-shadow: 0 5px 0px #E64A19; }
+        #btnAvancarHistoria { box-shadow: 0 7px 0px #E64A19, 0 15px 30px rgba(0,0,0,0.4), inset 0 0 15px rgba(255, 255, 255, 0.7); }
+        #btnAvancarHistoria:hover { box-shadow: 0 10px 0px #E64A19, 0 25px 40px rgba(0,0,0,0.5), inset 0 0 25px rgba(255, 255, 255, 1); }
+        
+        #btnIniciarJogoDeVerdade { 
+            background-color: #00BCD4; 
+            font-size: 2em;
+            margin-top: 50px; 
+        }
+        #btnIniciarJogoDeVerdade:hover { 
+            background-color: #26C6DA; 
+        }
+        /* Cor de sombra inferior para 3D do botão */
+        #btnIniciarJogoDeVerdade:active { box-shadow: 0 5px 0px #0097A7; }
+        #btnIniciarJogoDeVerdade { box-shadow: 0 7px 0px #0097A7, 0 15px 30px rgba(0,0,0,0.4), inset 0 0 15px rgba(255, 255, 255, 0.7); }
+        #btnIniciarJogoDeVerdade:hover { box-shadow: 0 10px 0px #0097A7, 0 25px 40px rgba(0,0,0,0.5), inset 0 0 25px rgba(255, 255, 255, 1); }
+
+        /* EFEITO BRILHO MÁGICO (Swipe) para botões de navegação */
+        #btnVoltarHistoria::after, #btnAvancarHistoria::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            /* Brilho Mágico Dourado/Claro */
+            background: linear-gradient(90deg, transparent, rgba(255, 240, 150, 0.7), transparent); 
+            transform: skewX(-20deg); 
+            transition: all 0.7s ease;
+        }
+
+        #btnVoltarHistoria:hover::after, #btnAvancarHistoria:hover::after {
+            left: 150%; 
+        }
+
+        /* ========================================================================= */
+        /* INPUTS E MENSAGENS */
+        /* ========================================================================= */
+        input {
+            width: 70%; 
+            padding: 20px; 
+            font-size: 1.5em;
+            border: 5px solid #b2dfdb; 
+            border-radius: 20px; 
+            margin-top: 18px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.95); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        input:focus {
+            border-color: #00BCD4; 
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.7);
+            outline: none; 
+        }
+
+        #mensagem-erro {
+            color: #D32F2F; 
+            font-weight: bold;
+            margin-top: 18px;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
+        }
+
+        /* ========================================================================= */
+        /* ÁREA DA HISTÓRIA (SLIDESHOW) */
+        /* ========================================================================= */
+        #area-historia {
+            width: 100%;
+            padding: 20px 0;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            gap: 20px; 
+        }
+
+        #msg-boas-vindas-historia {
+            margin-bottom: 20px; 
+        }
+
+        .slideshow-container {
+            position: relative;
+            margin: auto;
+            max-width: 600px; 
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column; 
+            justify-content: center;
+            align-items: center;
+            padding: 10px; 
+        }
+
+        .mySlides {
+            display: none;
+            text-align: center;
+            width: 100%;
+            padding: 10px 0;
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mySlides img {
+            max-width: 95%; 
+            max-height: 350px; 
+            border-radius: 30px; 
+            margin-bottom: 25px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 
+                        0 0 15px rgba(255, 255, 255, 0.5) inset; 
+            border: 5px solid rgba(255, 255, 255, 0.8); 
+        }
+
+        .slide-text {
+            font-size: 1.8em; 
+            color: #004d40;
+            min-height: 7em; 
+            /* MELHORIA DE VISIBILIDADE: Sombra mais forte */
+            text-shadow: 2px 2px 3px rgba(255, 255, 255, 1), -2px -2px 3px rgba(255, 255, 255, 1);
+            margin-top: 0; 
+            /* MELHORIA DE VISIBILIDADE: Aumenta opacidade do fundo para o texto se destacar */
+            background-color: rgba(255, 255, 255, 0.9); 
+            padding: 15px 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            line-height: 1.4; 
+        }
+
+        .slide-buttons {
+            margin-top: 30px; 
+            width: 100%;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            gap: 20px; 
+        }
+        
+        .slide-buttons .btn-acao {
+            margin: 0; 
+        }
+
+        #area-jogo-real {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px; 
+        }
+        
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5em; }
+            h2 { font-size: 2.0em; }
+            p, label { font-size: 1.2em; }
+            .btn-acao { font-size: 1.5em; padding: 15px 30px; }
+            input { padding: 15px; font-size: 1.2em; width: 85%; }
+            .container { padding: 30px; min-height: auto; margin-bottom: 30px;} 
+            .mySlides img { max-height: 250px; }
+            .slide-text { font-size: 1.4em; min-height: 6em;}
+            .slide-buttons { flex-direction: row; gap: 10px; flex-wrap: wrap; }
+            .slide-buttons .btn-acao { width: 45%; font-size: 1.3em;} 
+            #btnIniciarJogoDeVerdade { width: 95%; }
+        }
+        @media (max-width: 480px) {
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.6em; }
+            p, label { font-size: 1em; }
+            .btn-acao { font-size: 1.2em; padding: 12px 25px; margin-top: 30px; }
+            input { padding: 12px; font-size: 1em; }
+            .container { padding: 20px; min-height: auto; }
+            .mySlides img { max-height: 200px; }
+            .slide-text { font-size: 1.2em; min-height: 5em;}
+            .slide-buttons { flex-direction: column; gap: 15px; }
+            .slide-buttons .btn-acao { width: 95%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div id="form-registro">
+            <h1>A Ilha do Saber: A História do Tico!</h1>
+            <p>Olá, aventureiro(a)! Para começar nossa missão na Ilha do Saber, diga-nos seu nome e idade. Você será o grande ajudante do Tico para recuperar as joias!</p>
+
+            <div>
+                <label for="nome">Qual é o seu nome?</label>
+                <input type="text" id="nome" placeholder="Digite seu nome aqui...">
+            </div>
+
+            <div>
+                <label for="idade">Quantos aninhos você tem? 🎂</label>
+                <input type="number" id="idade" placeholder="Ex: 6" min="1" max="100">
+            </div>
+
+            <button id="btnComecarRegistro" class="btn-acao">Iniciar Aventura!</button>
+
+            <p id="mensagem-erro"></p>
+        </div>
+
+        <div id="area-historia" style="display:none;">
+            <h2 id="titulo-historia">Uma Ajuda para o Macaco Tico!</h2>
+            <p id="msg-boas-vindas-historia" style="font-size: 1.35em;"></p>
+
+            <div class="slideshow-container">
+                
+</div>
+            
+            <div class="slide-buttons">
+                <button id="btnVoltarHistoria" class="btn-acao">Anterior</button>
+                <button id="btnAvancarHistoria" class="btn-acao">Próximo</button>
+                <button id="btnIniciarJogoDeVerdade" class="btn-acao" style="display:none;">Começar o Jogo!</button>
+            </div>
+        </div>
+        
+        <div id="area-jogo-real" style="display:none;">
+            <h2>Prepare-se!</h2> 
+            <p>Seja bem-vindo(a), <span id="nome-jogador-jogo" style="color:#FF7043; font-weight:bold;"></span>! A aventura de verdade começa agora na Ilha do Saber!</p>
+            <p>Em breve, os desafios matemáticos para recuperar as joias do Tico aparecerão aqui!</p>
+            <button class="btn-acao" onclick="window.location.reload()" style="background-color: #D32F2F;">Voltar ao Início</button>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Elementos do registro
+            const btnComecarRegistro = document.getElementById('btnComecarRegistro');
+            const inputNome = document.getElementById('nome');
+            const inputIdade = document.getElementById('idade');
+            const msgErro = document.getElementById('mensagem-erro');
+            const formRegistro = document.getElementById('form-registro');
+
+            // Elementos da história (slideshow)
+            const areaHistoria = document.getElementById('area-historia');
+            const msgBoasVindasHistoria = document.getElementById('msg-boas-vindas-historia');
+            const slideshowContainer = document.querySelector('.slideshow-container');
+            const btnVoltarHistoria = document.getElementById('btnVoltarHistoria');
+            const btnAvancarHistoria = document.getElementById('btnAvancarHistoria');
+            const btnIniciarJogoDeVerdade = document.getElementById('btnIniciarJogoDeVerdade');
+
+            // Elementos da área de jogo (para depois)
+            const areaJogoReal = document.getElementById('area-jogo-real');
+            const nomeJogadorJogo = document.getElementById('nome-jogador-jogo');
+
+            let nomeDoJogador = "";
+            let slideIndex = 0;
+
+            // *** CAMINHOS LOCAIS DOS SEUS ARQUIVOS DE IMAGEM DA HISTÓRIA! ***
+            const slidesData = [
+                {
+                    image: 'imagens_tico/tico_joia.jpg', // Exemplo
+                    text: 'No coração da Ilha do Saber, vive o Macaco Tico, um macaquinho muito esperto e brincalhão. Tico adora colecionar pedras brilhantes e coloridas!'
+                },
+                {
+                    image: 'imagens_tico/tico_roubo.jpg', // Exemplo
+                    text: 'Um dia, enquanto Tico tirava uma soneca, um pássaro atrevido e rápido, o Pardal Ladrão, voou e levou embora as joias mais lindas do Tico! Oh não!'
+                },
+                {
+                    image: 'imagens_tico/tico_triste.jpg', // Exemplo
+                    text: 'Tico está muito triste e precisa da sua ajuda, <span class="nome-personalizado" style="color:#ff6347; font-weight:bold;"></span>! Para recuperar as Joias do Saber, teremos que resolver muitos desafios de matemática! Você topa essa missão?'
+                }
+            ];
+
+            /**
+             * Função para mostrar o slide atual.
+             * @param {number} n - O índice do slide a ser mostrado.
+             */
+            function mostrarSlide(n) {
+                const slides = slideshowContainer.querySelectorAll('.mySlides');
+                
+                if (n < 0) {
+                    slideIndex = 0;
+                } else if (n >= slidesData.length) {
+                    slideIndex = slidesData.length - 1;
+                } else {
+                    slideIndex = n;
+                }
+                
+                slides.forEach(slide => {
+                    if(slide.style.display === 'flex') {
+                        slide.style.animation = 'fadeOutSlide 0.3s ease-in forwards';
+                        setTimeout(() => { slide.style.display = 'none'; }, 300);
+                    } else {
+                        slide.style.display = 'none';
+                    }
+                });
+
+                if (slides[slideIndex]) {
+                    setTimeout(() => {
+                        slides[slideIndex].style.display = 'flex'; 
+                        slides[slideIndex].style.animation = 'fadeInSlide 0.5s ease-out forwards';
+                        
+                        const nomeSpan = slides[slideIndex].querySelector('.nome-personalizado');
+                        if (nomeSpan) {
+                            nomeSpan.textContent = nomeDoJogador;
+                        }
+                    }, 300);
+                }
+
+                btnVoltarHistoria.style.display = (slideIndex === 0) ? 'none' : 'inline-flex'; 
+                
+                if (slideIndex === slidesData.length - 1) {
+                    btnAvancarHistoria.style.display = 'none';
+                    btnIniciarJogoDeVerdade.style.display = 'inline-flex'; 
+                } else {
+                    btnAvancarHistoria.style.display = 'inline-flex'; 
+                    btnIniciarJogoDeVerdade.style.display = 'none';
+                }
+            }
+
+            /**
+             * Adiciona ou subtrai ao índice do slide.
+             * @param {number} n - Valor a ser adicionado (1 para avançar, -1 para voltar).
+             */
+            function mudarSlide(n) {
+                mostrarSlide(slideIndex + n);
+            }
+
+            /**
+             * Preenche o slideshow com os dados dos slides.
+             */
+            function preencherSlideshow() {
+                slideshowContainer.innerHTML = '';
+                slidesData.forEach((data, index) => {
+                    const slideDiv = document.createElement('div');
+                    slideDiv.classList.add('mySlides');
+                    slideDiv.style.animation = 'none'; 
+
+                    if (data.image) {
+                        const img = document.createElement('img');
+                        img.src = data.image;
+                        img.alt = `Cena da história ${index + 1}`;
+                        slideDiv.appendChild(img);
+                    }
+
+                    const textP = document.createElement('p');
+                    textP.classList.add('slide-text');
+                    textP.innerHTML = data.text;
+                    slideDiv.appendChild(textP);
+
+                    slideshowContainer.appendChild(slideDiv);
+                });
+                mostrarSlide(0); 
+            }
+
+
+            /**
+             * Função que lida com o clique no botão "Iniciar Aventura!" (do registro).
+             */
+            function iniciarRegistro() {
+                nomeDoJogador = inputNome.value.trim();
+                const idade = inputIdade.value.trim();
+
+                if (nomeDoJogador === "") {
+                    msgErro.textContent = "Ops! Você esqueceu de dizer seu nome. 😅";
+                    return;
+                }
+                
+                if (idade === "" || parseInt(idade) <= 0 || isNaN(parseInt(idade))) {
+                    msgErro.textContent = "Por favor, digite quantos aninhos você tem (um número válido). 🎈";
+                    return;
+                }
+
+                msgErro.textContent = ""; 
+                formRegistro.style.animation = 'fadeOutUp 0.5s ease-in forwards';
+                
+                setTimeout(() => {
+                    formRegistro.style.display = 'none';
+                    areaHistoria.style.display = 'flex';
+                    areaHistoria.style.animation = 'fadeInDown 0.5s ease-out forwards';
+
+                    msgBoasVindasHistoria.innerHTML = `Olá, <strong>${nomeDoJogador}</strong>! Que legal que você tem <strong>${idade}</strong> anos!`;
+                    
+                    preencherSlideshow();
+                }, 500);
+
+            }
+
+            /**
+             * Função que lida com o clique no botão "Começar o Jogo!" (final da história).
+             */
+          function iniciarJogoDeVerdade() {
+    window.location.href = "Menu_fases.html";
+}
+
+            // Listeners de Eventos
+            btnComecarRegistro.addEventListener('click', iniciarRegistro);
+            btnAvancarHistoria.addEventListener('click', () => mudarSlide(1));
+            btnVoltarHistoria.addEventListener('click', () => mudarSlide(-1));
+            btnIniciarJogoDeVerdade.addEventListener('click', iniciarJogoDeVerdade);
+
+            inputNome.addEventListener('keypress', (e) => { if (e.key === 'Enter') iniciarRegistro(); });
+            inputIdade.addEventListener('keypress', (e) => { if (e.key === 'Enter') iniciarRegistro(); });
+            
+        });
+    </script>
+
+</body>
+</html>
