@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adição com Drag & Drop</title>
-    
+    <link rel="icon" href="../favicon-16x16.png" type="image/x-icon">
     <style>
         /* Reset básico */
         * {
@@ -442,15 +442,13 @@
 
             // LÓGICA CORRIGIDA: Não reinicia a fase, simula navegação para um menu.
             document.querySelector('.btn-voltar-fase').addEventListener('click', () => {
-                alert('Voltando para o Menu Principal/Seleção de Fases!');
-                
+                            
                 // Se o seu menu principal estiver em um arquivo diferente, você pode usar:
              window.location.href = '../fase 1/fase_1.html';
             });
 
             document.querySelector('.btn-proxima-fase').addEventListener('click', () => {
-                alert('Navegando para a próxima fase do Macaco Tico!');
-                 window.location.href = '../fase 3/fase_3.html'; 
+             window.location.href = '../fase 3/fase_3.html'; 
             });
         }
         // ===================================================

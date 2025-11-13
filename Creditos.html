@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créditos do Jogo - Tico na Ilha</title>
+    <link rel="icon" href="/favicon-16x16.png" type="image/x-icon">
+    <style>
+        /* Estilos base para a página - Fundo de Ilha */
+        body {
+            /* 📚 Documentação: Inclui a imagem de fundo */
+            background-image: url('fundo_creditos.jpg'); /* Certifique-se que o nome do arquivo está correto! */
+            background-color: #80c7d4; /* Cor de fallback */
+            background-size: cover; /* Garante que a imagem preencha a tela */
+            background-position: center;
+            
+            font-family: 'Poppins', sans-serif;
+            color: #3d2f23;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Container principal - Areia da Praia/Coco */
+        .creditos-container {
+            width: 90%;
+            max-width: 650px;
+            /* Deixamos o fundo do container quase branco e ligeiramente transparente para destacar sobre a imagem */
+            background-color: rgba(255, 255, 255, 0.80); 
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            border: 8px solid #ffac1c; /* Laranja da fruta ou sol */
+        }
+
+        /* Títulos */
+        h1 {
+            color: #4caf50; 
+            margin-bottom: 10px;
+            font-size: 3em;
+            text-shadow: 2px 2px #fff; /* Sombra branca para garantir que o título se destaque da imagem de fundo */
+        }
+
+        h2 {
+            color: #1e88e5; 
+            margin-top: 5px;
+            margin-bottom: 30px;
+            font-size: 1.6em;
+            font-weight: 400;
+        }
+
+        h3 {
+             color: #ff9800; 
+             margin-top: 25px;
+             text-decoration: underline;
+        }
+
+        /* Lista de Créditos (Funções e Nomes) */
+        ul {
+            list-style: none; 
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        li {
+            font-size: 1.15em;
+            margin-bottom: 12px;
+            padding: 8px;
+            background-color: #e8f5e9; /* Fundo suave para cada item */
+            border-radius: 5px;
+            text-align: left;
+        }
+        
+        .funcao {
+            font-weight: bold;
+            color: #3d2f23; 
+            display: inline-block;
+            width: 40%;
+        }
+        
+        .nome {
+            font-weight: normal;
+            color: #1e88e5; 
+        }
+        
+        /* Créditos Especiais - Tico */
+        .agradecimento-tico {
+            margin-top: 30px;
+            font-size: 1.3em;
+            font-style: italic;
+            color: #ff4500; 
+        }
+
+        /* Botão de Retorno */
+        #btn-retorno {
+            margin-top: 40px;
+            padding: 12px 25px;
+            background-color: #f44336; 
+            color: white;
+            border: none;
+            border-radius: 25px; 
+            cursor: pointer;
+            font-size: 1.1em;
+            box-shadow: 0 5px #c62828;
+            transition: all 0.1s;
+        }
+        
+        #btn-retorno:active {
+            box-shadow: 0 2px #c62828;
+            transform: translateY(3px);
+        }
+        
+        /* Estilo da Logo/Faculdade */
+        .faculdade-logo {
+            margin-top: 35px;
+            padding-top: 15px;
+            border-top: 2px dashed #ccc;
+            font-size: 1.1em;
+            color: #004d40; 
+        }
+        
+        .faculdade-logo span {
+            font-weight: bold;
+            display: block;
+            font-size: 1.4em;
+            color: #007bff; 
+        }
+    </style>
+    
+    </head>
+<body>
+    <div class="creditos-container">
+        <h1>Jogo a Ilha do Saber!</h1> 
+        <h2>Projeto de Alfabetização Matemática e Letramento</h2>
+        
+        <h3>Organização do Projeto</h3>
+        <ul>
+            <li><span class="funcao">Product Owner (P.O.):</span> <span class="nome">Ketlen</span></li>
+            <li><span class="funcao">Scrum Master:</span> <span class="nome">Guilherme Moura</span></li>
+            <li><span class="funcao">Testador (QA):</span> <span class="nome">Luan Cardoso</span></li>
+        </ul>
+        
+        <h3>Equipe de Desenvolvimento</h3>
+        <ul>
+            <li><span class="funcao">Desenvolvedor:</span> <span class="nome">Cauan</span></li>
+            <li><span class="funcao">Desenvolvedor:</span> <span class="nome">Wendel</span></li>
+            <li><span class="funcao">Desenvolvedor:</span> <span class="nome">Yan</span></li>
+        </ul>
+        
+        <p class="agradecimento-tico">Agradecimentos especiais ao Tico por nos guiar nesta aventura!</p>
+        
+        <div class="faculdade-logo">
+            Desenvolvido por alunos da: <span>Universidade Cruzeiro do Sul</span>
+            </div>
+
+        <button id="btn-retorno">Voltar à Ilha</button>
+    </div>
+
+    <script>
+        const botaoRetorno = document.getElementById('btn-retorno');
+
+        function retornarAoJogo() {
+            // Ação para voltar ao jogo principal.
+            // Altere 'index.html' se a sua página principal tiver outro nome.
+            window.location.href = 'index.html'; 
+            
+            console.log('Retornando para a tela principal do jogo...');
+        }
+
+        // Adiciona o ouvinte de evento 'click' ao botão
+        botaoRetorno.addEventListener('click', retornarAoJogo);
+    </script>
+</body>
+</html>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Fase 28 - Ordem de Operações</title>
+    <link rel="icon" href="../favicon-16x16.png" type="image/x-icon">
     
 <style>
         /* --- ESTILOS VISUAIS --- */
@@ -911,7 +912,9 @@
 
             modalButtonsContinue.innerHTML = `
                 <button class="continue-button" onclick="startNewRound()">Jogar Mais Uma Rodada</button>
-                <button class="nav-button" onclick="window.location.href='../index.html'">Voltar ao Menu Principal</button>
+             <button class="nav-button" onclick="window.location.href='../Final/final.html'">Ir para o final do jogo</button>
+                <button class="nav-button" onclick="window.location.href='../Menu_fases.html'">Voltar ao Menu Principal</button>
+                <button class="stop-button" onclick="window.location.href='../index.html'">Sair para a Tela Inicial</button>
             `;
             modalButtonsContinue.style.display = 'flex';
             modalButtonsFinal.style.display = 'none';

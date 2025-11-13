@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fase 4 - Vamos Aprender Adição com Subtração</title>
+    <link rel="icon" href="../favicon-16x16.png" type="image/x-icon">
     
     <style>
         body {
@@ -375,12 +376,12 @@
             resultadosUsados.length = 0;
 
             document.querySelector('.btn-voltar-fase').addEventListener('click', () => {
-                alert('Voltando para o Menu Principal/Seleção de Fases!');
-                // Aqui você implementaria a lógica real de navegação.
+                
+                window.location.href = '../fase 3/fase_3.html';
             });
             
             document.querySelector('.btn-proxima-fase').addEventListener('click', () => {
-                alert('Navegando para a próxima fase do Macaco Tico!');
+                
                  window.location.href = '../fase 5/fase_5.html'; 
             });
         }

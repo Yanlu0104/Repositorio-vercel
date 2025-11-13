@@ -1,4 +1,3 @@
-<!-- Adicionar antes ou após o início do jogo -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -6,42 +5,95 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Menu das Fases - Ilha do Saber</title>
   <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon-16x16.png" type="image/x-icon">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+    
     body {
       margin: 0;
       min-height: 100vh;
-      background: url('ilha_saber2.jpg') center center/cover no-repeat fixed, #87CEEB;
+      background: url('ilha_saber2.jpg') center center/cover no-repeat fixed, 
+                  linear-gradient(to bottom, #1a8cff, #70e6db, #1a8cff);
       font-family: 'Bubblegum Sans', Arial Rounded MT Bold, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
-    .menu-fases-container {
-      background: rgba(255,255,255,0.85);
-      border-radius: 40px;
-      box-shadow: 0 0 40px rgba(0,0,0,0.10);
-      padding: 40px 25px;
-      margin: 60px auto 0;
+    
+    .container {
+      width: 100%;
+      max-width: 900px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      max-width: 750px;
+      perspective: 1000px;
     }
+    
+    .header-decoration {
+      width: 100%;
+      height: 30px;
+      background: linear-gradient(to right, transparent, #ffcc00, transparent);
+      border-radius: 15px;
+      margin-bottom: 10px;
+      box-shadow: 0 5px 15px rgba(255, 204, 0, 0.5);
+    }
+    
+    .menu-fases-container {
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 40px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25), 
+                  inset 0 -5px 15px rgba(255, 255, 255, 0.8),
+                  inset 0 5px 15px rgba(255, 255, 255, 0.8);
+      padding: 40px 30px;
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      border: 8px solid #f0f8ff;
+      transform-style: preserve-3d;
+      animation: containerFloat 6s ease-in-out infinite;
+    }
+    
+    .menu-fases-container::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: linear-gradient(45deg, #ffcc00, #ff3366, #33ccff, #33cc33);
+      z-index: -1;
+      filter: blur(20px);
+      opacity: 0.4;
+      animation: rainbowBorder 8s linear infinite;
+    }
+    
     h1 {
       color: #1e3a5f;
       font-size: 3.2em;
-      margin-bottom: 25px;
-      text-shadow: 0 0 10px #70e6db, 3px 3px 0px #0003;
+      margin: 0 0 25px 0;
+      text-shadow: 0 0 10px #70e6db, 3px 3px 0px rgba(0, 0, 0, 0.2);
       animation: pulse 2s infinite alternate;
+      text-align: center;
+      position: relative;
+      z-index: 1;
     }
+    
     .fases-grid {
       display: grid;
       gap: 30px;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       width: 100%;
-      margin-top: 15px;
-      margin-bottom: 25px;
+      margin: 15px 0 25px;
     }
+    
     .fase-btn {
       background: linear-gradient(135deg, #ffb347 40%, #ffcc80 100%);
       color: #fff;
@@ -50,40 +102,82 @@
       border-radius: 50%;
       width: 120px;
       height: 120px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.18), 0 5px 0 #b76e2f;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18), 
+                  0 5px 0 #b76e2f,
+                  inset 0 -5px 10px rgba(0, 0, 0, 0.1),
+                  inset 0 5px 10px rgba(255, 255, 255, 0.5);
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: transform 0.18s cubic-bezier(.42,.11,.27,1.57), box-shadow 0.3s;
+      transition: transform 0.18s cubic-bezier(.42,.11,.27,1.57), 
+                  box-shadow 0.3s,
+                  background 0.3s;
       outline: none;
       position: relative;
       overflow: hidden;
-      animation: fadeIn 1.7s;
       font-family: inherit;
+      animation: fadeIn 1.7s;
     }
+    
+    .fase-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.4) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .fase-btn:hover::before {
+      opacity: 1;
+    }
+    
     .fase-btn:hover, .fase-btn:focus {
-      transform: scale(1.08);
-      box-shadow: 0 18px 44px rgba(0,0,0,0.3), 0 10px 0 #b76e2f;
+      transform: scale(1.08) rotate(5deg);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3), 
+                  0 10px 0 #b76e2f,
+                  inset 0 -5px 10px rgba(0, 0, 0, 0.1),
+                  inset 0 5px 10px rgba(255, 255, 255, 0.5);
       background: linear-gradient(135deg, #f9d976, #fcc95d 80%);
     }
+    
     .fase-btn:active {
       animation: jellyBounce 0.2s;
       transform: scale(0.95);
     }
-    /* Efeitos animados e responsividade */
-    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-    @keyframes pulse { 0% {filter:brightness(1);} 100% {filter:brightness(1.1);} }
-    @keyframes jellyBounce { 0%{ transform: scale(1);} 50%{ transform:scale(0.9);} 100%{ transform:scale(1);} }
-    @media (max-width:600px) {
-      .menu-fases-container { padding: 12px 2px; }
-      .fases-grid { gap: 12px; }
-      .fase-btn { width: 75px; height: 75px; font-size: 1.3em; }
-      h1 { font-size: 2em; }
-    }
+    
+    /* Botões com cores diferentes */
+    .fase-btn-1 { background: linear-gradient(135deg, #ff6b6b, #ff8e8e); box-shadow: 0 10px 35px rgba(0,0,0,0.18), 0 5px 0 #c44545; }
+    .fase-btn-1:hover { background: linear-gradient(135deg, #ff8e8e, #ffaaaa); }
+    
+    .fase-btn-2 { background: linear-gradient(135deg, #4ecdc4, #88d8d2); box-shadow: 0 10px 35px rgba(0,0,0,0.18), 0 5px 0 #2a9d94; }
+    .fase-btn-2:hover { background: linear-gradient(135deg, #88d8d2, #a8e6e1); }
+    
+    .fase-btn-3 { background: linear-gradient(135deg, #ffd166, #ffe0a3); box-shadow: 0 10px 35px rgba(0,0,0,0.18), 0 5px 0 #d4ac3c; }
+    .fase-btn-3:hover { background: linear-gradient(135deg, #ffe0a3, #ffebb9); }
+    
+    .fase-btn-4 { background: linear-gradient(135deg, #06d6a0, #5ce0b8); box-shadow: 0 10px 35px rgba(0,0,0,0.18), 0 5px 0 #02a87a; }
+    .fase-btn-4:hover { background: linear-gradient(135deg, #5ce0b8, #8ce8cf); }
+    
+    .fase-btn-5 { background: linear-gradient(135deg, #118ab2, #4fb4d4); box-shadow: 0 10px 35px rgba(0,0,0,0.18), 0 5px 0 #0a6c8c; }
+    .fase-btn-5:hover { background: linear-gradient(135deg, #4fb4d4, #7ccbe3); }
+    
+    .fase-btn-6 { background: linear-gradient(135deg, #ef476f, #f57c9a); box-shadow: 0 10px 35px rgba(0,0,0,0.18), 0 5px 0 #c72c4f; }
+    .fase-btn-6:hover { background: linear-gradient(135deg, #f57c9a, #f9a4b9); }
+    
+    .fase-btn-7 { background: linear-gradient(135deg, #7209b7, #9d4edd); box-shadow: 0 10px 35px rgba(0,0,0,0.18), 0 5px 0 #56068c; }
+    .fase-btn-7:hover { background: linear-gradient(135deg, #9d4edd, #b87de9); }
+    
+    .fase-btn-8 { background: linear-gradient(135deg, #f48c06, #f8b650); box-shadow: 0 10px 35px rgba(0,0,0,0.18), 0 5px 0 #c26f04; }
+    .fase-btn-8:hover { background: linear-gradient(135deg, #f8b650, #f9cc83); }
+    
     .btn-voltar {
-      background: #4DD0E1;
+      background: linear-gradient(to bottom, #4DD0E1, #26C6DA);
       font-size: 1.3em;
       padding: 12px 33px;
       border-radius: 30px;
@@ -91,30 +185,218 @@
       border: none;
       margin-top: 18px;
       cursor: pointer;
-      box-shadow: 0 7px 0 #00ACC1, 0 15px 30px rgba(0,0,0,0.25);
-      transition: background .35s, box-shadow .33s, transform .17s;
+      box-shadow: 0 7px 0 #00ACC1, 
+                  0 15px 30px rgba(0, 0, 0, 0.25),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      transition: all 0.3s ease;
+      font-family: inherit;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
     }
-    .btn-voltar:hover { background: #80DEEA; box-shadow: 0 10px 0 #00ACC1, 0 25px 34px rgba(0,0,0,0.33);}
+    
+    .btn-voltar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #80DEEA, #4DD0E1);
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .btn-voltar:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 0 #00ACC1, 
+                  0 25px 34px rgba(0, 0, 0, 0.33),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+    
+    .btn-voltar:hover::before {
+      opacity: 1;
+    }
+    
+    .btn-voltar:active {
+      transform: translateY(2px);
+      box-shadow: 0 3px 0 #00ACC1, 
+                  0 10px 20px rgba(0, 0, 0, 0.2),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+    
+    
+    
+    
+    /* Efeitos animados e responsividade */
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: translateY(20px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
+    
+    @keyframes pulse { 
+      0% { transform: scale(1); filter: brightness(1); } 
+      100% { transform: scale(1.03); filter: brightness(1.1); } 
+    }
+    
+    @keyframes jellyBounce { 
+      0% { transform: scale(1); } 
+      50% { transform: scale(0.9); } 
+      100% { transform: scale(1); } 
+    }
+    
+    @keyframes containerFloat {
+      0% { transform: translateY(0px) rotateX(5deg); }
+      50% { transform: translateY(-10px) rotateX(5deg); }
+      100% { transform: translateY(0px) rotateX(5deg); }
+    }
+    
+    @keyframes rainbowBorder {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    @media (max-width: 768px) {
+      .fases-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+      
+      .menu-fases-container {
+        padding: 25px 15px;
+      }
+      
+      h1 {
+        font-size: 2.5em;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .fases-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+      
+      .fase-btn {
+        width: 100px;
+        height: 100px;
+        font-size: 1.8em;
+      }
+      
+      h1 {
+        font-size: 2em;
+      }
+      
+      .menu-fases-container {
+        padding: 20px 10px;
+        border-radius: 30px;
+      }
+    }
+    
+    .cloud {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+      opacity: 0.7;
+      z-index: -1;
+    }
+    
+    .cloud-1 {
+      width: 120px;
+      height: 40px;
+      top: 10%;
+      left: 5%;
+      animation: floatCloud 25s linear infinite;
+    }
+    
+    .cloud-2 {
+      width: 80px;
+      height: 30px;
+      top: 25%;
+      right: 10%;
+      animation: floatCloud 20s linear infinite reverse;
+    }
+    
+    .cloud-3 {
+      width: 100px;
+      height: 35px;
+      bottom: 15%;
+      left: 15%;
+      animation: floatCloud 30s linear infinite;
+    }
+    
+    @keyframes floatCloud {
+      0% { transform: translateX(-500px); }
+      100% { transform: translateX(calc(100vw + 100px)); }
+    }
   </style>
 </head>
 <body>
-  <div class="menu-fases-container">
-    <h1>SELECIONE UMA FASE</h1>
-    <div class="fases-grid">
-      <button class="fase-btn-1" onclick="window.location.href='fase 1/fase_1.html'">1</button>
-      <button class="fase-btn-2" onclick="window.location.href='fase 2/fase_2.html'">2</button>
-      <button class="fase-btn-3" onclick="window.location.href='fase 3/fase_3.html'">3</button>
-      <button class="fase-btn-4" onclick="window.location.href='fase 4/fase_4.html'">4</button>
-      <button class="fase-btn-5" onclick="window.location.href='fase 5/fase_5.html'">5</button>
-      <button class="fase-btn-6" onclick="window.location.href='fase 6/fase_6.html'">6</button>
-      <button class="fase-btn-7" onclick="window.location.href='fase 7/fase_7.html'">7</button>
-      <button class="fase-btn-8" onclick="window.location.href='fase 8/fase_8.html'">8</button>
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div>
+  
+  <div class="container">
+    <div class="header-decoration"></div>
+    
+   
     </div>
-    <button class="btn-voltar" onclick="window.location.href='./index.html'">Voltar para início</button>
+    
+    <div class="menu-fases-container">
+      <h1>SELECIONE UMA FASE</h1>
+      <div class="fases-grid">
+        <button class="fase-btn fase-btn-1" onclick="window.location.href='fase 1/fase_1.html'">1</button>
+        <button class="fase-btn fase-btn-2" onclick="window.location.href='fase 2/fase_2.html'">2</button>
+        <button class="fase-btn fase-btn-3" onclick="window.location.href='fase 3/fase_3.html'">3</button>
+        <button class="fase-btn fase-btn-4" onclick="window.location.href='fase 4/fase_4.html'">4</button>
+        <button class="fase-btn fase-btn-5" onclick="window.location.href='fase 5/fase_5.html'">5</button>
+        <button class="fase-btn fase-btn-6" onclick="window.location.href='fase 6/fase_6.html'">6</button>
+        <button class="fase-btn fase-btn-7" onclick="window.location.href='fase 7/fase_7.html'">7</button>
+        <button class="fase-btn fase-btn-8" onclick="window.location.href='fase 8/fase_8.html'">8</button>
+      </div>
+      <button class="btn-voltar" onclick="window.location.href='./index.html'">Voltar para início</button>
+    </div>
   </div>
+
   <script>
-
-
+    // Adicionar efeitos de interação aos botões
+    document.querySelectorAll('.fase-btn').forEach(button => {
+      button.addEventListener('mouseenter', function() {
+        this.style.transform = 'scale(1.08) rotate(5deg)';
+      });
+      
+      button.addEventListener('mouseleave', function() {
+        this.style.transform = 'scale(1) rotate(0deg)';
+      });
+      
+      // Adicionar efeito de clique
+      button.addEventListener('click', function() {
+        this.style.animation = 'jellyBounce 0.4s';
+        setTimeout(() => {
+          this.style.animation = '';
+        }, 400);
+      });
+    });
+    
+    // Efeito de digitação no título (opcional)
+    const title = document.querySelector('h1');
+    const originalText = title.textContent;
+    title.textContent = '';
+    
+    let i = 0;
+    const typeWriter = () => {
+      if (i < originalText.length) {
+        title.textContent += originalText.charAt(i);
+        i++;
+        setTimeout(typeWriter, 100);
+      }
+    };
+    
+    // Iniciar efeito de digitação após um breve delay
+    setTimeout(typeWriter, 500);
   </script>
 </body>
 </html>

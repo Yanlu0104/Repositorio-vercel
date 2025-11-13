@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitória! O Macaco Tico Agradece!</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon-16x16.png" type="image/x-icon">
+
+    <style>
+        /* ========================================================================= */
+        /* ANIMAÇÕES GERAIS */
+        /* ========================================================================= */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.02); filter: brightness(1.1); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========================================================================= */
+        /* ESTILOS GERAIS E FUNDO (Replicados do seu código) */
+        /* ========================================================================= */
+        html, body {
+            min-height: 100vh; 
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; 
+        }
+        body {
+            font-family: 'Bubblegum Sans', 'Arial Rounded MT Bold', sans-serif;
+            /* Fundo da Ilha do Saber */
+            background-image: url('https://placehold.co/1200x800/87CEEB/1e3a5f/png?text=Ilha+do+Saber'); 
+            background-size: cover; 
+            background-repeat: no-repeat; 
+            background-position: center center; 
+            background-attachment: fixed; 
+            background-color: #87CEEB; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 0; 
+            color: #333;
+            animation: fadeIn 1.5s ease-out; 
+        }
+
+        .container {
+            /* Fundo branco semi-transparente do seu código */
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 40px; 
+            box-shadow: 
+                0 0 40px rgba(0, 0, 0, 0.2), 
+                inset 0 0 10px rgba(255, 255, 255, 0.5); 
+            text-align: center;
+            width: 90%;
+            max-width: 750px; 
+            min-height: 500px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: auto; 
+            border: 8px solid #FFAB40; /* Borda Laranja do seu código */
+            animation: fadeInDown 1s ease-out;
+        }
+
+        /* TÍTULOS (Replicados do seu código) */
+        h1, h2 {
+            color: #1e3a5f;
+            font-size: 3.5em; 
+            margin-bottom: 20px;
+            text-shadow: 
+                3px 3px 0px #FFD700, 
+                5px 5px 0px rgba(0, 0, 0, 0.3); 
+            animation: pulse 2s infinite alternate; 
+        }
+        
+        p {
+            font-size: 1.5em; 
+            color: #000000; 
+            line-height: 1.6;
+            text-shadow: 1px 1px 1px #fff;
+        }
+
+        /* BOTÕES (Replicados do seu código) */
+        .btn-acao {
+            font-size: 1.8em; 
+            padding: 15px 40px; 
+            border-radius: 50px; 
+            margin-top: 30px;
+            transition: all 0.2s ease; 
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+            color: white; 
+            border: none;
+            cursor: pointer;
+            display: inline-flex; 
+            align-items: center;
+            justify-content: center;
+            /* Estilo específico para o botão de Jogar Novamente */
+            background-color: #00897B;
+            box-shadow: 0 7px 0px #005f56; 
+        }
+
+        .btn-acao:hover {
+            transform: translateY(-3px); 
+            filter: brightness(1.1);
+        }
+        .btn-acao:active {
+            transform: translateY(4px); 
+            box-shadow: 0 1px 0px #005f56; 
+        }
+
+        /* ========================================================================= */
+        /* ESTILO DA MENSAGEM FINAL */
+        /* ========================================================================= */
+        .fase-final-agradecimento {
+            /* Estilo que combina com o seu tema */
+            background-color: #E0F2F1; 
+            border: 4px dashed #00897B; 
+            padding: 30px;
+            border-radius: 25px;
+            margin: 20px auto;
+            max-width: 650px;
+            font-family: 'Roboto', sans-serif; 
+            font-size: 1.1em;
+            line-height: 1.5;
+            color: #333;
+            text-shadow: none; 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tico-fala {
+            color: #00897B;
+            font-weight: bold;
+            font-size: 1.3em;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .agradecimento-destaque {
+            color: #FF5722; 
+            font-size: 1.8em;
+            font-weight: bold;
+            display: block;
+            margin: 20px 0;
+            font-family: 'Bubblegum Sans', cursive;
+            text-shadow: 1px 1px #FFF9C4;
+        }
+
+        .imagem-tico-final {
+            max-width: 350px; 
+            height: auto;
+            margin: 20px 0;
+            border-radius: 10px; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <h1>Vitória na Ilha do Saber!</h1>
+        
+        <h2 style="font-size: 2.5em; margin-top: -30px;">Parabéns, <span id="nome-do-jogador" style="color: #00897B;">Aventureiro(a)</span>!</h2>
+
+        <img src="imagem_final_do_jogo.jpg" 
+             alt="Tico super feliz fazendo um coração com as mãos"
+             class="imagem-tico-final">
+
+        <div class="fase-final-agradecimento">
+            
+            <span class="tico-fala">Tico (com o coração cheio de carinho!): Missão cumprida!</span>
+            
+            <p style="font-size: 1.2em;">Com a sua ajuda, todas as Joias do Saber estão seguras e a nossa ilha está mais mágica do que nunca!</p>
+
+            <p>Eu não teria passado pelos desafios da Adição, da Subtração, e das outras operações sem a sua incrível inteligência e esforço!!!</p>
+
+            <span class="agradecimento-destaque">Muito, muito obrigado por me ajudarem e por terem jogado nosso jogo!</span>
+            
+            <p>Vocês são os mais novos Super Aventureiros do Conhecimento!!! Lembrem-se: a curiosidade é a nossa maior aventura!</p>
+            
+            <p style="font-size: 0.9em; text-align: right; color: #5D4037; margin-top: 20px; font-family: 'Bubblegum Sans', cursive;">— Com muito carinho e celebração, Tico e a Ilha do Saber.</p>
+        </div>
+
+        <button class="btn-acao" onclick="window.location.reload()">Jogar Novamente!</button>
+        
+    </div>
+
+    <script>
+        // Script simples para preencher o nome do jogador (opcional)
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const nome = urlParams.get('nome');
+            const nomeSpan = document.getElementById('nome-do-jogador');
+            
+            if (nome && nomeSpan) {
+                nomeSpan.textContent = decodeURIComponent(nome);
+            }
+        });
+    </script>
+
+</body>
+</html>
